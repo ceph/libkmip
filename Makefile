@@ -52,7 +52,7 @@ install: all
 	cp $(SRCDIR)/*.h $(DESTDIR)$(PREFIX)/include/$(KMIP)
 	cp $(SRCDIR)/$(LIBNAME) $(DESTDIR)$(PREFIX)/lib
 	cp $(SRCDIR)/$(ARCNAME) $(DESTDIR)$(PREFIX)/lib
-	cd $(DESTDIR)$(PREFIX)/lib && ln -s $(LIBNAME) $(LINKNAME) && cd -
+	cd $(DESTDIR)$(PREFIX)/lib && ln -sf $(LIBNAME) $(LINKNAME) && cd -
 
 install_html_docs: html_docs
 	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/$(KMIP)/html
