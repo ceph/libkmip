@@ -74,11 +74,11 @@ html_docs:
 	cd $(SRCDIR)/docs && make html && cd -
 demos: demo_create demo_get demo_destroy
 demo_get: demo_get.o $(OFILES)
-	$(CC) $(LDFLAGS) -o demo_get $? $(LDLIBS)
+	$(CC) $(LDFLAGS) -o demo_get demo_get.o $(OFILES) $(LDLIBS)
 demo_create: demo_create.o $(OFILES)
-	$(CC) $(LDFLAGS) -o demo_create $? $(LDLIBS)
+	$(CC) $(LDFLAGS) -o demo_create demo_create.o $(OFILES) $(LDLIBS)
 demo_destroy: demo_destroy.o $(OFILES)
-	$(CC) $(LDFLAGS) -o demo_destroy $? $(LDLIBS)
+	$(CC) $(LDFLAGS) -o demo_destroy demo_destroy.o $(OFILES) $(LDLIBS)
 tests: tests.o kmip.o kmip_memset.o
 	$(CC) $(LDFLAGS) -o tests tests.o kmip.o kmip_memset.o
 
