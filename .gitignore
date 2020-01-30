@@ -1,2 +1,8 @@
 *.o
-
+*.lo
+*.a
+*.so.*
+demo_create
+demo_destroy
+demo_get
+tests
