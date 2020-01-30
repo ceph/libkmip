@@ -993,7 +993,32 @@ test_get_enum_string_index(TestTracker *tracker)
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(-1) != 25)
+    if(kmip_get_enum_string_index(KMIP_TAG_MAXIMUM_ITEMS) != 25)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_STORAGE_STATUS_MASK) != 26)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_OBJECT_GROUP_MEMBER) != 27)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_OFFSET_ITEMS) != 28)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_LOCATED_ITEMS) != 29)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(-1) != 30)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }

@@ -163,7 +163,7 @@ kmip_memcpy(void *state, void *destination, const void *source, size_t size)
 Enumeration Utilities
 */
 
-static const char *kmip_attribute_names[26] = {
+static const char *kmip_attribute_names[] = {
     "Attestation Type",
     "BatchErrorContinuation Option",
     "BlockCipher Mode",
@@ -189,6 +189,11 @@ static const char *kmip_attribute_names[26] = {
     "Tag", /*?*/
     "Type", /*?*/
     "Wrapping Method",
+    "Maximum Items",
+    "Storage Status Mask",
+    "Object Group Member",
+    "Offset Items",
+    "Located Items",
     "Unknown" /* Catch all for unsupported enumerations */
 };
 
@@ -296,9 +301,29 @@ kmip_get_enum_string_index(enum tag t)
         case KMIP_TAG_WRAPPING_METHOD:
         return(24);
         break;
+
+	case KMIP_TAG_MAXIMUM_ITEMS:
+	return(25);
+	break;
+
+	case KMIP_TAG_STORAGE_STATUS_MASK:
+	return(26);
+	break;
+
+	case KMIP_TAG_OBJECT_GROUP_MEMBER:
+	return(27);
+	break;
+
+	case KMIP_TAG_OFFSET_ITEMS:
+	return(28);
+	break;
+
+	case KMIP_TAG_LOCATED_ITEMS:
+	return(29);
+	break;
         
         default:
-        return(25);
+        return(30);
         break;
     };
 }
@@ -306,6 +331,7 @@ kmip_get_enum_string_index(enum tag t)
 int
 kmip_check_enum_value(enum kmip_version version, enum tag t, int value)
 {
+    int m;
     switch(t)
     {
         case KMIP_TAG_ATTESTATION_TYPE:
@@ -862,16 +888,66 @@ kmip_check_enum_value(enum kmip_version version, enum tag t, int value)
         case KMIP_TAG_OPERATION:
         switch(value)
         {
+	    case KMIP_OP_EXPORT:
+	    case KMIP_OP_IMPORT:
+            if(version < KMIP_1_4)
+                return(KMIP_INVALID_FOR_VERSION);
+            else return(KMIP_OK);
+
+	    case KMIP_OP_JOIN_SPLIT_KEY:
+	    case KMIP_OP_CREATE_SPLIT_KEY:
+	    case KMIP_OP_HASH:
+	    case KMIP_OP_RNG_SEED:
+	    case KMIP_OP_RNG_RETRIEVE:
+	    case KMIP_OP_MAC_VERIFY:
+	    case KMIP_OP_MAC:
+	    case KMIP_OP_SIGNATURE_VERIFY:
+	    case KMIP_OP_SIGN:
+	    case KMIP_OP_DECRYPT:
+	    case KMIP_OP_ENCRYPT:
+            if(version < KMIP_1_2)
+                return(KMIP_INVALID_FOR_VERSION);
+            else return(KMIP_OK);
+
+	    case KMIP_OP_DISCOVER_VERSIONS:
+	    case KMIP_OP_REKEY_KEY_PAIR:
+            if(version < KMIP_1_1)
+                return(KMIP_INVALID_FOR_VERSION);
+            else return(KMIP_OK);
+
             /* KMIP 1.0 */
-            case KMIP_OP_CREATE:
-            case KMIP_OP_GET:
-            case KMIP_OP_DESTROY:
+	    case KMIP_OP_PUT:
+	    case KMIP_OP_NOTIFY:
+	    case KMIP_OP_POLL:
+	    case KMIP_OP_CANCEL:
+	    case KMIP_OP_QUERY:
+	    case KMIP_OP_VALIDATE:
+	    case KMIP_OP_RECOVER:
+	    case KMIP_OP_ARCHIVE:
+	    case KMIP_OP_DESTROY:
+	    case KMIP_OP_REVOKE:
+	    case KMIP_OP_ACTIVATE:
+	    case KMIP_OP_GET_USAGE_ALLOCATION:
+	    case KMIP_OP_OBTAIN_LEASE:
+	    case KMIP_OP_DELETE_ATTRIBUTE:
+	    case KMIP_OP_MODIFY_ATTRIBUTE:
+	    case KMIP_OP_ADD_ATTRIBUTE:
+	    case KMIP_OP_GET_ATTRIBUTE_LIST:
+	    case KMIP_OP_GET_ATTRIBUTES:
+	    case KMIP_OP_GET:
+	    case KMIP_OP_CHECK:
+	    case KMIP_OP_LOCATE:
+	    case KMIP_OP_RECERTIFY:
+	    case KMIP_OP_CERTIFY:
+	    case KMIP_OP_DERIVE_KEY:
+	    case KMIP_OP_REKEY:
+	    case KMIP_OP_REGISTER:
+	    case KMIP_OP_CREATE_KEY_PAIR:
+	    case KMIP_OP_CREATE:
             return(KMIP_OK);
-            break;
             
             default:
             return(KMIP_ENUM_MISMATCH);
-            break;
         };
         break;
         
@@ -1129,6 +1205,21 @@ kmip_check_enum_value(enum kmip_version version, enum tag t, int value)
             break;
         };
         break;
+
+        case KMIP_TAG_STORAGE_STATUS_MASK:
+	if ((value & ~(KMIP_OGM_GROUP_MEMBER_FRESH|KMIP_OGM_GROUP_MEMBER_DEFAULT)))
+	    return KMIP_ENUM_MISMATCH;
+	return KMIP_OK;
+
+        case KMIP_TAG_OBJECT_GROUP_MEMBER:
+	m = KMIP_SSM_ONLINE_STORAGE | KMIP_SSM_ARCHIVAL_STORAGE;
+	if(version >= KMIP_2_0) {
+	    m |= KMIP_SSM_DESTROYED_STORAGE;
+	}
+	if (value & ~m)
+	    return KMIP_ENUM_MISMATCH;
+	return KMIP_OK;
+	break;
         
         default:
         return(KMIP_ENUM_UNSUPPORTED);
@@ -1947,6 +2038,47 @@ kmip_print_operation_enum(enum operation value)
         case KMIP_OP_DESTROY:
         printf("Destroy");
         break;
+
+        case KMIP_OP_CREATE_KEY_PAIR: printf ("Create Key Pair"); break;
+        case KMIP_OP_REGISTER: printf ("Register"); break;
+        case KMIP_OP_REKEY: printf ("Re-key"); break;
+        case KMIP_OP_DERIVE_KEY: printf ("Derive Key"); break;
+        case KMIP_OP_CERTIFY: printf ("Certify"); break;
+        case KMIP_OP_RECERTIFY: printf ("Recertify"); break;
+        case KMIP_OP_LOCATE: printf ("Locate"); break;
+        case KMIP_OP_CHECK: printf ("Check"); break;
+        case KMIP_OP_GET_ATTRIBUTES: printf ("Get Attributes"); break;
+        case KMIP_OP_GET_ATTRIBUTE_LIST: printf ("Get Attribute List"); break;
+        case KMIP_OP_ADD_ATTRIBUTE: printf ("Add Attribute"); break;
+        case KMIP_OP_MODIFY_ATTRIBUTE: printf ("Modify Attribute"); break;
+        case KMIP_OP_DELETE_ATTRIBUTE: printf ("Delete Attribute"); break;
+        case KMIP_OP_OBTAIN_LEASE: printf ("Obtain Lease"); break;
+        case KMIP_OP_GET_USAGE_ALLOCATION: printf ("Get Usage Allocation"); break;
+        case KMIP_OP_ACTIVATE: printf ("Activate"); break;
+        case KMIP_OP_REVOKE: printf ("Revoke"); break;
+        case KMIP_OP_ARCHIVE: printf ("Archive"); break;
+        case KMIP_OP_RECOVER: printf ("Recover"); break;
+        case KMIP_OP_VALIDATE: printf ("Validate"); break;
+        case KMIP_OP_QUERY: printf ("Query"); break;
+        case KMIP_OP_CANCEL: printf ("Cancel"); break;
+        case KMIP_OP_POLL: printf ("Poll"); break;
+        case KMIP_OP_NOTIFY: printf ("Notify"); break;
+        case KMIP_OP_PUT: printf ("Put"); break;
+        case KMIP_OP_REKEY_KEY_PAIR: printf ("Rekey Key Pair"); break;
+        case KMIP_OP_DISCOVER_VERSIONS: printf ("Discover Versions"); break;
+        case KMIP_OP_ENCRYPT: printf ("Encrypt"); break;
+        case KMIP_OP_DECRYPT: printf ("Decrypt"); break;
+        case KMIP_OP_SIGN: printf ("Sign"); break;
+        case KMIP_OP_SIGNATURE_VERIFY: printf ("Signature Verify"); break;
+        case KMIP_OP_MAC: printf ("MAC"); break;
+        case KMIP_OP_MAC_VERIFY: printf ("MAC Verify"); break;
+        case KMIP_OP_RNG_RETRIEVE: printf ("RNG Retrieve"); break;
+        case KMIP_OP_RNG_SEED: printf ("RNG Seed"); break;
+        case KMIP_OP_HASH: printf ("Hash"); break;
+        case KMIP_OP_CREATE_SPLIT_KEY: printf ("Create Split Key"); break;
+        case KMIP_OP_JOIN_SPLIT_KEY: printf ("Join Split Key"); break;
+        case KMIP_OP_IMPORT: printf ("Import"); break;
+        case KMIP_OP_EXPORT: printf ("Export"); break;
         
         default:
         printf("Unknown");
@@ -3622,6 +3754,38 @@ kmip_print_protection_storage_mask_enum(int indent, int32 value)
 }
 
 void
+kmip_print_storage_status_mask_enum(enum storage_status_mask value)
+{
+    char *sep = "";
+    if((value & KMIP_SSM_ONLINE_STORAGE))
+    {
+        printf("%sonline", sep); sep = " ";
+    }
+    if((value & KMIP_SSM_ARCHIVAL_STORAGE))
+    {
+        printf("%sarchived", sep); sep = " ";
+    }
+    if((value & KMIP_SSM_DESTROYED_STORAGE))
+    {
+        printf("%sdestroyed", sep); sep = " ";
+    }
+}
+
+void
+kmip_print_object_group_member_enum(enum object_group_member value)
+{
+    char *sep = "";
+    if((value & KMIP_OGM_GROUP_MEMBER_FRESH))
+    {
+        printf("%sfresh", sep); sep = " ";
+    }
+    if((value & KMIP_OGM_GROUP_MEMBER_DEFAULT))
+    {
+        printf("%sdefault", sep); sep = " ";
+    }
+}
+
+void
 kmip_print_protection_storage_masks(int indent, ProtectionStorageMasks *value)
 {
     printf("%*sProtection Storage Masks @ %p\n", indent, "", (void *)value);
@@ -4150,6 +4314,58 @@ kmip_print_create_response_payload(int indent, CreateResponsePayload *value)
 }
 
 void
+kmip_print_locate_request_payload(int indent, LocateRequestPayload *value)
+{
+    printf("%*sLocate Request Payload @ %p\n", indent, "", (void *)value);
+    
+    if(value != NULL)
+    {
+        printf("%*sMaximum Items: ", indent + 2, "");
+        kmip_print_integer(value->maximum_items);
+        printf("\n");
+
+        printf("%*sOffset Items: ", indent + 2, "");
+        kmip_print_integer(value->offset_items);
+        printf("\n");
+ 
+        printf("%*sStorage Status Mask: ", indent + 2, "");
+        kmip_print_storage_status_mask_enum(value->storage_status_mask);
+        printf("\n");
+ 
+        printf("%*sObject Group Member: ", indent + 2, "");
+        kmip_print_object_group_member_enum(value->object_group_member);
+        printf("\n");
+
+	printf("%*sAttributes: %d\n", indent + 2, "", value->attribute_count);
+	for(int i = 0; i < value->attribute_count; ++i)
+	{
+	    kmip_print_attribute(indent + 4, value->attributes + i);
+	}
+    }
+}
+
+void
+kmip_print_locate_response_payload(int indent, LocateResponsePayload *value)
+{
+    printf("%*sLocate Response Payload @ %p\n", indent, "", (void *)value);
+    
+    if(value != NULL)
+    {
+        printf("%*sLocated Items: ", indent + 2, "");
+        kmip_print_integer(value->located_items);
+        printf("\n");
+
+	printf("%*sUnique Identifiers: %d\n", indent + 2, "", value->unique_identifiers_count);
+	for(int i = 0; i < value->unique_identifiers_count; ++i)
+	{
+	    printf("%*s%.*s\n", indent + 4, "",
+		(int)value->unique_identifiers[i].size,
+		value->unique_identifiers[i].value);
+	}
+    }
+}
+
+void
 kmip_print_get_request_payload(int indent, GetRequestPayload *value)
 {
     printf("%*sGet Request Payload @ %p\n", indent, "", (void *)value);
@@ -4232,6 +4448,10 @@ kmip_print_request_payload(int indent, enum operation type, void *value)
         kmip_print_create_request_payload(indent, value);
         break;
         
+        case KMIP_OP_LOCATE:
+        kmip_print_locate_request_payload(indent, (LocateRequestPayload *)value);
+        break;
+        
         case KMIP_OP_GET:
         kmip_print_get_request_payload(indent, (GetRequestPayload *)value);
         break;
@@ -4253,6 +4473,10 @@ kmip_print_response_payload(int indent, enum operation type, void *value)
     {
         case KMIP_OP_CREATE:
         kmip_print_create_response_payload(indent, value);
+        break;
+        
+        case KMIP_OP_LOCATE:
+        kmip_print_locate_response_payload(indent, (LocateResponsePayload *)value);
         break;
         
         case KMIP_OP_GET:
@@ -5158,6 +5382,44 @@ kmip_free_create_response_payload(KMIP *ctx, CreateResponsePayload *value)
 }
 
 void
+kmip_free_locate_request_payload(KMIP *ctx, LocateRequestPayload *value)
+{
+    if(value != NULL)
+    {
+        if(value->attributes != NULL)
+        {
+            for(int i = 0; i < value->attribute_count; i++)
+            {
+                kmip_free_attribute(ctx, &value->attributes[i]);
+            }
+            ctx->free_func(ctx->state, value->attributes);
+        }
+	memset(value, 0, sizeof *value);
+    }
+    
+    return;
+}
+
+void
+kmip_free_locate_response_payload(KMIP *ctx, LocateResponsePayload *value)
+{
+    if(value != NULL)
+    {
+        if(value->unique_identifiers != NULL)
+        {
+            for(int i = 0; i < value->unique_identifiers_count; i++)
+            {
+                kmip_free_text_string(ctx, &value->unique_identifiers[i]);
+            }
+            ctx->free_func(ctx->state, value->unique_identifiers);
+        }
+	memset(value, 0, sizeof *value);
+    }
+    
+    return;
+}
+
+void
 kmip_free_get_request_payload(KMIP *ctx, GetRequestPayload *value)
 {
     if(value != NULL)
@@ -5286,6 +5548,10 @@ kmip_free_request_batch_item(KMIP *ctx, RequestBatchItem *value)
                 kmip_free_create_request_payload(ctx, (CreateRequestPayload *)value->request_payload);
                 break;
                 
+                case KMIP_OP_LOCATE:
+                kmip_free_locate_request_payload(ctx, (LocateRequestPayload *)value->request_payload);
+                break;
+                
                 case KMIP_OP_GET:
                 kmip_free_get_request_payload(ctx, (GetRequestPayload *)value->request_payload);
                 break;
@@ -5349,6 +5615,10 @@ kmip_free_response_batch_item(KMIP *ctx, ResponseBatchItem *value)
             {
                 case KMIP_OP_CREATE:
                 kmip_free_create_response_payload(ctx, (CreateResponsePayload *)value->response_payload);
+                break;
+                
+                case KMIP_OP_LOCATE:
+                kmip_free_locate_response_payload(ctx, (LocateResponsePayload *)value->response_payload);
                 break;
                 
                 case KMIP_OP_GET:
@@ -6986,6 +7256,95 @@ kmip_compare_create_response_payload(const CreateResponsePayload *a, const Creat
 }
 
 int
+kmip_compare_locate_request_payload(const LocateRequestPayload *a, const LocateRequestPayload *b)
+{
+    if(a != b)
+    {
+        if((a == NULL) || (b == NULL))
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->maximum_items != b->maximum_items)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->offset_items != b->offset_items)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->storage_status_mask != b->storage_status_mask)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->object_group_member != b->object_group_member)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->attribute_count != b->attribute_count)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->attributes != b->attributes)
+        {
+            if((a->attributes == NULL) || (b->attributes == NULL))
+            {
+                return(KMIP_FALSE);
+            }
+            for(int i = 0; i < a->attribute_count; ++i)
+            {
+                if(kmip_compare_attribute(a->attributes + i, b->attributes + i) == KMIP_FALSE)
+                {
+                    return(KMIP_FALSE);
+                }
+            }
+        }
+    }
+    
+    return(KMIP_TRUE);
+}
+
+int
+kmip_compare_locate_response_payload(const LocateResponsePayload *a, const LocateResponsePayload *b)
+{
+    if(a != b)
+    {
+        if((a == NULL) || (b == NULL))
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->located_items != b->located_items)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->unique_identifiers_count != b->unique_identifiers_count)
+        {
+            return(KMIP_FALSE);
+        }
+        
+        if(a->unique_identifiers != b->unique_identifiers)
+        {
+            for(int i = 0; i < a->unique_identifiers_count; ++i)
+            {
+                if(kmip_compare_text_string(a->unique_identifiers + i, b->unique_identifiers + i) == KMIP_FALSE)
+                {
+                    return(KMIP_FALSE);
+                }
+            }
+        }
+    }
+    
+    return(KMIP_TRUE);
+}
+
+int
 kmip_compare_get_request_payload(const GetRequestPayload *a, const GetRequestPayload *b)
 {
     if(a != b)
@@ -7207,6 +7566,13 @@ kmip_compare_request_batch_item(const RequestBatchItem *a, const RequestBatchIte
                 }
                 break;
                 
+                case KMIP_OP_LOCATE:
+                if(kmip_compare_locate_request_payload((LocateRequestPayload *)a->request_payload, (LocateRequestPayload *)b->request_payload) == KMIP_FALSE)
+                {
+                    return(KMIP_FALSE);
+                }
+                break;
+                
                 case KMIP_OP_GET:
                 if(kmip_compare_get_request_payload((GetRequestPayload *)a->request_payload, (GetRequestPayload *)b->request_payload) == KMIP_FALSE)
                 {
@@ -7307,6 +7673,13 @@ kmip_compare_response_batch_item(const ResponseBatchItem *a, const ResponseBatch
             {
                 case KMIP_OP_CREATE:
                 if(kmip_compare_create_response_payload((CreateResponsePayload *)a->response_payload, (CreateResponsePayload *)b->response_payload) == KMIP_FALSE)
+                {
+                    return(KMIP_FALSE);
+                }
+                break;
+                
+                case KMIP_OP_LOCATE:
+                if(kmip_compare_locate_response_payload((LocateResponsePayload *)a->response_payload, (LocateResponsePayload *)b->response_payload) == KMIP_FALSE)
                 {
                     return(KMIP_FALSE);
                 }
@@ -9262,9 +9635,104 @@ kmip_encode_create_response_payload(KMIP *ctx, const CreateResponsePayload *valu
     kmip_encode_int32_be(ctx, curr_index - value_index);
     
     ctx->index = curr_index;
-    
+     
     return(KMIP_OK);
 }
+
+int
+kmip_encode_locate_request_payload(KMIP *ctx, const LocateRequestPayload *value)
+{
+    int result = 0;
+    result = kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_REQUEST_PAYLOAD, KMIP_TYPE_STRUCTURE));
+    CHECK_RESULT(ctx, result);
+
+    uint8 *length_index = ctx->index;
+    uint8 *value_index = ctx->index += 4;
+
+    if(value->maximum_items != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_MAXIMUM_ITEMS, value->maximum_items);
+        CHECK_RESULT(ctx, result);
+    }
+
+    if(value->offset_items != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_OFFSET_ITEMS, value->offset_items);
+        CHECK_RESULT(ctx, result);
+    }
+
+    if(value->storage_status_mask != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_STORAGE_STATUS_MASK, value->storage_status_mask);
+        CHECK_RESULT(ctx, result);
+    }
+
+    if(value->object_group_member != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_OBJECT_GROUP_MEMBER, value->object_group_member);
+        CHECK_RESULT(ctx, result);
+    }
+
+    if(ctx->version < KMIP_2_0)
+    {
+	if (value->attributes)
+	{
+	    for(int i = 0; i < value->attribute_count; ++i)
+	    {
+		result = kmip_encode_attribute(ctx, value->attributes + i);
+		CHECK_RESULT(ctx, result);
+	    }
+	}
+    } else {
+// XXX something here.!
+return KMIP_NOT_IMPLEMENTED;
+    }
+
+    uint8 *curr_index = ctx->index;
+    ctx->index = length_index;
+
+    kmip_encode_int32_be(ctx, curr_index - value_index);
+
+    ctx->index = curr_index;
+
+    return(KMIP_OK);
+}
+
+
+int
+kmip_encode_locate_response_payload(KMIP *ctx, const LocateResponsePayload *value)
+{
+    int result = 0;
+    result = kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_RESPONSE_PAYLOAD, KMIP_TYPE_STRUCTURE));
+    CHECK_RESULT(ctx, result);
+
+    uint8 *length_index = ctx->index;
+    uint8 *value_index = ctx->index += 4;
+
+    if(value->located_items != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_LOCATED_ITEMS, value->located_items);
+        CHECK_RESULT(ctx, result);
+    }
+
+    if (value->unique_identifiers) {
+	for(int i = 0; i < value->unique_identifiers_count; ++i)
+	{
+	    result = kmip_encode_text_string(ctx, KMIP_TAG_UNIQUE_IDENTIFIER, value->unique_identifiers + i);
+	    CHECK_RESULT(ctx, result);
+	}
+    }
+
+    uint8 *curr_index = ctx->index;
+    ctx->index = length_index;
+
+    kmip_encode_int32_be(ctx, curr_index - value_index);
+
+    ctx->index = curr_index;
+
+    return(KMIP_OK);
+}
+
 
 int
 kmip_encode_get_request_payload(KMIP *ctx, const GetRequestPayload *value)
@@ -9841,6 +10309,10 @@ kmip_encode_request_batch_item(KMIP *ctx, const RequestBatchItem *value)
         result = kmip_encode_create_request_payload(ctx, (CreateRequestPayload*)value->request_payload);
         break;
         
+        case KMIP_OP_LOCATE:
+        result = kmip_encode_locate_request_payload(ctx, (LocateRequestPayload*)value->request_payload);
+        break;
+        
         case KMIP_OP_GET:
         result = kmip_encode_get_request_payload(ctx, (GetRequestPayload*)value->request_payload);
         break;
@@ -9910,6 +10382,10 @@ kmip_encode_response_batch_item(KMIP *ctx, const ResponseBatchItem *value)
     {
         case KMIP_OP_CREATE:
         result = kmip_encode_create_response_payload(ctx, (CreateResponsePayload*)value->response_payload);
+        break;
+        
+        case KMIP_OP_LOCATE:
+        result = kmip_encode_locate_response_payload(ctx, (LocateResponsePayload*)value->response_payload);
         break;
         
         case KMIP_OP_GET:
@@ -11451,6 +11927,106 @@ kmip_decode_create_response_payload(KMIP *ctx, CreateResponsePayload *value)
 }
 
 int
+kmip_decode_locate_request_payload(KMIP *ctx, LocateRequestPayload *value)
+{
+    CHECK_BUFFER_FULL(ctx, 8);
+
+    int result = 0;
+    int32 tag_type = 0;
+    uint32 length = 0;
+    int i;
+
+    value->attributes = 0;
+    kmip_decode_int32_be(ctx, &tag_type);
+    CHECK_TAG_TYPE(ctx, tag_type, KMIP_TAG_REQUEST_PAYLOAD, KMIP_TYPE_STRUCTURE);
+
+    kmip_decode_int32_be(ctx, &length);
+    CHECK_BUFFER_FULL(ctx, length);
+
+    if(kmip_is_tag_next(ctx, KMIP_TAG_MAXIMUM_ITEMS))
+    {
+	result = kmip_decode_enum(ctx, KMIP_TAG_MAXIMUM_ITEMS, &value->maximum_items);
+	CHECK_RESULT(ctx, result);
+    }
+
+    if(kmip_is_tag_next(ctx, KMIP_TAG_OFFSET_ITEMS))
+    {
+	result = kmip_decode_enum(ctx, KMIP_TAG_OFFSET_ITEMS, &value->offset_items);
+	CHECK_RESULT(ctx, result);
+    }
+
+    if(kmip_is_tag_next(ctx, KMIP_TAG_STORAGE_STATUS_MASK))
+    {
+	result = kmip_decode_enum(ctx, KMIP_TAG_STORAGE_STATUS_MASK, &value->storage_status_mask);
+	CHECK_RESULT(ctx, result);
+    }
+
+    if(kmip_is_tag_next(ctx, KMIP_TAG_OBJECT_GROUP_MEMBER))
+    {
+	result = kmip_decode_enum(ctx, KMIP_TAG_OBJECT_GROUP_MEMBER, &value->object_group_member);
+	CHECK_RESULT(ctx, result);
+    }
+
+    if(ctx->version < KMIP_2_0)
+    {
+	value->attribute_count = kmip_get_num_items_next(ctx, KMIP_TAG_ATTRIBUTE);
+
+	value->attributes = ctx->calloc_func(ctx->state, value->attribute_count, sizeof(Attributes));
+	CHECK_NEW_MEMORY(ctx, value->attributes,
+		value->attribute_count*sizeof(Attributes), "Attributes list");
+	for (i = 0; i < value->attribute_count; ++i)
+	{
+	    result = kmip_decode_attribute(ctx, value->attributes + i);
+	    CHECK_RESULT(ctx, result);
+	}
+    } else {
+        if(kmip_is_tag_next(ctx, KMIP_TAG_ATTRIBUTES)) {
+// XXX something here.!
+return KMIP_NOT_IMPLEMENTED;
+	}
+    }
+
+    return(KMIP_OK);
+}
+
+
+int
+kmip_decode_locate_response_payload(KMIP *ctx, LocateResponsePayload *value)
+{
+    CHECK_BUFFER_FULL(ctx, 8);
+
+    int result = 0;
+    int32 tag_type = 0;
+    uint32 length = 0;
+    int i;
+
+    value->unique_identifiers = NULL;
+    kmip_decode_int32_be(ctx, &tag_type);
+    CHECK_TAG_TYPE(ctx, tag_type, KMIP_TAG_RESPONSE_PAYLOAD, KMIP_TYPE_STRUCTURE);
+
+    kmip_decode_int32_be(ctx, &length);
+    CHECK_BUFFER_FULL(ctx, length);
+
+    if(kmip_is_tag_next(ctx, KMIP_TAG_LOCATED_ITEMS))
+    {
+	result = kmip_decode_enum(ctx, KMIP_TAG_MAXIMUM_ITEMS, &value->located_items);
+	CHECK_RESULT(ctx, result);
+    }
+
+    value->unique_identifiers_count = kmip_get_num_items_next(ctx, KMIP_TAG_UNIQUE_IDENTIFIER);
+    value->unique_identifiers = ctx->calloc_func(ctx->state, value->unique_identifiers_count, sizeof(TextString));
+    CHECK_NEW_MEMORY(ctx, value->unique_identifiers,
+	    value->unique_identifiers_count*sizeof(TextString), "UniqueIdentifier list");
+    for (i = 0; i < value->unique_identifiers_count; ++i)
+    {
+	result = kmip_decode_text_string(ctx, KMIP_TAG_UNIQUE_IDENTIFIER, value->unique_identifiers +i);
+	CHECK_RESULT(ctx, result);
+    }
+
+    return(KMIP_OK);
+}
+
+int
 kmip_decode_get_request_payload(KMIP *ctx, GetRequestPayload *value)
 {
     CHECK_BUFFER_FULL(ctx, 8);
@@ -11660,6 +12236,12 @@ kmip_decode_request_batch_item(KMIP *ctx, RequestBatchItem *value)
         result = kmip_decode_create_request_payload(ctx, (CreateRequestPayload *)value->request_payload);
         break;
         
+        case KMIP_OP_LOCATE:
+        value->request_payload = ctx->calloc_func(ctx->state, 1, sizeof(LocateRequestPayload));
+        CHECK_NEW_MEMORY(ctx, value->request_payload, sizeof(LocateRequestPayload), "LocateRequestPayload structure");
+        result = kmip_decode_locate_request_payload(ctx, (LocateRequestPayload*)value->request_payload);
+        break;
+        
         case KMIP_OP_GET:
         value->request_payload = ctx->calloc_func(ctx->state, 1, sizeof(GetRequestPayload));
         CHECK_NEW_MEMORY(ctx, value->request_payload, sizeof(GetRequestPayload), "GetRequestPayload structure");
@@ -11750,6 +12332,13 @@ kmip_decode_response_batch_item(KMIP *ctx, ResponseBatchItem *value)
             value->response_payload = ctx->calloc_func(ctx->state, 1, sizeof(CreateResponsePayload));
             CHECK_NEW_MEMORY(ctx, value->response_payload, sizeof(CreateResponsePayload), "CreateResponsePayload structure");
             result = kmip_decode_create_response_payload(ctx, value->response_payload);
+            break;
+            
+            case KMIP_OP_LOCATE:
+            value->response_payload = ctx->calloc_func(ctx->state, 1, sizeof(LocateResponsePayload));
+            CHECK_NEW_MEMORY(ctx, value->response_payload, sizeof(LocateResponsePayload), "LocateResponsePayload structure");
+            
+            result = kmip_decode_locate_response_payload(ctx, value->response_payload);
             break;
             
             case KMIP_OP_GET:
