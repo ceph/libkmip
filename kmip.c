@@ -4973,6 +4973,21 @@ kmip_free_attributes(KMIP *ctx, Attributes *value)
 }
 
 void
+kmip_free_attributes_2(KMIP *ctx, Attribute *value, int count)
+{
+    if(value != NULL)
+    {
+	for(int i = 0; i < count; i++)
+	{
+	    kmip_free_attribute(ctx, &value[i]);
+	}
+	ctx->free_func(ctx->state, value);
+    }
+
+    return;
+}
+
+void
 kmip_free_template_attribute(KMIP *ctx, TemplateAttribute *value)
 {
     if(value != NULL)
@@ -5386,14 +5401,7 @@ kmip_free_locate_request_payload(KMIP *ctx, LocateRequestPayload *value)
 {
     if(value != NULL)
     {
-        if(value->attributes != NULL)
-        {
-            for(int i = 0; i < value->attribute_count; i++)
-            {
-                kmip_free_attribute(ctx, &value->attributes[i]);
-            }
-            ctx->free_func(ctx->state, value->attributes);
-        }
+	kmip_free_attributes_2(ctx, value->attributes, value->attribute_count);
 	memset(value, 0, sizeof *value);
     }
     
@@ -8911,6 +8919,42 @@ kmip_encode_attributes(KMIP *ctx, const Attributes *value)
 }
 
 int
+kmip_encode_attributes_2(KMIP *ctx, const Attribute *value, int count)
+{
+    CHECK_ENCODE_ARGS(ctx, value);
+    CHECK_KMIP_VERSION(ctx, KMIP_2_0);
+
+    int result = 0;
+
+    result = kmip_encode_int32_be(
+        ctx,
+        TAG_TYPE(KMIP_TAG_ATTRIBUTES, KMIP_TYPE_STRUCTURE)
+    );
+    CHECK_RESULT(ctx, result);
+
+    uint8 *length_index = ctx->index;
+    uint8 *value_index = ctx->index += 4;
+
+    if(value) {
+	for (int i = 0; i < count; ++i)
+	{
+	    result = kmip_encode_attribute(ctx, value + i);
+	    CHECK_RESULT(ctx, result);
+	}
+    }
+
+    uint8 *curr_index = ctx->index;
+    ctx->index = length_index;
+
+    result = kmip_encode_int32_be(ctx, curr_index - value_index);
+    CHECK_RESULT(ctx, result);
+
+    ctx->index = curr_index;
+
+    return(KMIP_OK);
+}
+
+int
 kmip_encode_template_attribute(KMIP *ctx, const TemplateAttribute *value)
 {
     int result = 0;
@@ -9673,19 +9717,19 @@ kmip_encode_locate_request_payload(KMIP *ctx, const LocateRequestPayload *value)
         CHECK_RESULT(ctx, result);
     }
 
-    if(ctx->version < KMIP_2_0)
+    if (value->attributes)
     {
-	if (value->attributes)
+	if(ctx->version < KMIP_2_0)
 	{
 	    for(int i = 0; i < value->attribute_count; ++i)
 	    {
 		result = kmip_encode_attribute(ctx, value->attributes + i);
 		CHECK_RESULT(ctx, result);
 	    }
+	} else {
+	    result = kmip_encode_attributes_2(ctx, value->attributes, value->attribute_count);
+	    CHECK_RESULT(ctx, result);
 	}
-    } else {
-// XXX something here.!
-return KMIP_NOT_IMPLEMENTED;
     }
 
     uint8 *curr_index = ctx->index;
@@ -11143,6 +11187,61 @@ kmip_decode_attributes(KMIP *ctx, Attributes *value)
 }
 
 int
+kmip_decode_attributes_2(KMIP *ctx, Attribute **valuep, int *countp)
+{
+    CHECK_KMIP_VERSION(ctx, KMIP_2_0);
+    CHECK_BUFFER_FULL(ctx, 8);
+    uint8 *backup, *lim;
+    int i, count;
+    Attribute *attribute_list;
+
+    int result = 0;
+    int32 tag_type = 0;
+    uint32 length = 0, sublen;
+
+    *valuep = 0;
+    *countp = 0;
+    result = kmip_decode_int32_be(ctx, &tag_type);
+    CHECK_RESULT(ctx, result);
+    CHECK_TAG_TYPE(ctx, tag_type, KMIP_TAG_ATTRIBUTES, KMIP_TYPE_STRUCTURE);
+
+    result = kmip_decode_int32_be(ctx, &length);
+    CHECK_RESULT(ctx, result);
+    CHECK_BUFFER_FULL(ctx, length);
+
+    backup = ctx->index;
+    lim = backup + length;
+    count = 0;
+    while (ctx->index < lim-8)
+    {
+	ctx->index += 4;
+	result = kmip_decode_int32_be(ctx, &sublen);
+	if (result != KMIP_OK)
+	{
+	    break;
+	}
+	sublen += CALCULATE_PADDING(length);
+	if (ctx->index + sublen > lim)
+	{
+	    break;
+	}
+	++count;
+    }
+    ctx->index = backup;
+    attribute_list = ctx->calloc_func(ctx->state, count, sizeof(Attribute*));
+    CHECK_NEW_MEMORY(ctx, attribute_list, count*sizeof(Attribute*), "Attribute List");
+    *valuep = attribute_list;
+    *countp = count;
+    for (i = 0; i < count; ++i)
+    {
+        result = kmip_decode_attribute(ctx, attribute_list + i);
+        CHECK_RESULT(ctx, result);
+    }
+
+    return(KMIP_OK);
+}
+
+int
 kmip_decode_template_attribute(KMIP *ctx, TemplateAttribute *value)
 {
     CHECK_BUFFER_FULL(ctx, 8);
@@ -11980,9 +12079,16 @@ kmip_decode_locate_request_payload(KMIP *ctx, LocateRequestPayload *value)
 	    CHECK_RESULT(ctx, result);
 	}
     } else {
-        if(kmip_is_tag_next(ctx, KMIP_TAG_ATTRIBUTES)) {
-// XXX something here.!
-return KMIP_NOT_IMPLEMENTED;
+        if(kmip_is_tag_next(ctx, KMIP_TAG_ATTRIBUTES))
+	{
+	    result = kmip_decode_attributes_2(ctx, &value->attributes, &value->attribute_count);
+	    if (result != KMIP_OK)
+	    {
+		kmip_free_attributes_2(ctx, value->attributes, value->attribute_count);
+		value->attributes = 0;
+		value->attribute_count = 0;
+		return result;
+	    }
 	}
     }
 
