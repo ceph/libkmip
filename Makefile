@@ -18,8 +18,8 @@ LIBNAME  = $(LINKNAME).$(VERSION)
 LIBS     = $(LIBNAME) $(ARCNAME)
 
 CC      = cc
-#CFLAGS = -std=c11 -pedantic -g3 -Og -Wall -Wextra
-CFLAGS  = -std=c11 -pedantic -g3 -Wall -Wextra
+#CFLAGS = -std=c11 -pedantic -g3 -Og -Wall -Wextra -D_POSIX_C_SOURCE
+CFLAGS  = -std=c11 -pedantic -g3 -Wall -Wextra -D_POSIX_C_SOURCE
 LOFLAGS = -fPIC
 SOFLAGS = -shared -Wl,-soname,$(SONAME)
 LDFLAGS = -L/usr/local/lib

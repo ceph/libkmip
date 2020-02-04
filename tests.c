@@ -854,6 +854,10 @@ test_is_attribute_tag(TestTracker *tracker)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
+    if(!kmip_is_attribute_tag(KMIP_TAG_INITIAL_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
 
     if(kmip_is_attribute_tag(KMIP_TAG_REQUEST_MESSAGE))
     {
@@ -1018,7 +1022,12 @@ test_get_enum_string_index(TestTracker *tracker)
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(-1) != 30)
+    if(kmip_get_enum_string_index(KMIP_TAG_INITIAL_DATE) != 30)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(-1) != 31)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }

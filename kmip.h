@@ -79,7 +79,8 @@ enum attribute_type
     KMIP_ATTR_CRYPTOGRAPHIC_LENGTH      = 4,
     KMIP_ATTR_OPERATION_POLICY_NAME     = 5,
     KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK  = 6,
-    KMIP_ATTR_STATE                     = 7
+    KMIP_ATTR_STATE                     = 7,
+    KMIP_ATTR_INITIAL_DATE              = 8
 };
 
 enum batch_error_continuation_option
@@ -611,6 +612,7 @@ enum tag
     KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK         = 0x42002C,
     KMIP_TAG_ENCRYPTION_KEY_INFORMATION       = 0x420036,
     KMIP_TAG_HASHING_ALGORITHM                = 0x420038,
+    KMIP_TAG_INITIAL_DATE                     = 0x420039,
     KMIP_TAG_IV_COUNTER_NONCE                 = 0x42003D,
     KMIP_TAG_KEY                              = 0x42003F,
     KMIP_TAG_KEY_BLOCK                        = 0x420040,
@@ -1414,6 +1416,7 @@ void kmip_print_credential_type_enum(enum credential_type);
 void kmip_print_cryptographic_usage_mask_enums(int, int32);
 void kmip_print_integer(int32);
 void kmip_print_bool(int32);
+void kmip_print_date_time(int64);
 void kmip_print_text_string(int, const char *, TextString *);
 void kmip_print_byte_string(int, const char *, ByteString *);
 void kmip_print_protocol_version(int, ProtocolVersion *);
