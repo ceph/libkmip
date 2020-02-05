@@ -1120,6 +1120,13 @@ typedef struct cryptographic_parameters
     int32 trailer_field;
 } CryptographicParameters;
 
+typedef struct digest
+{
+    enum hashing_algorithm hashing_algorithm;
+    ByteString *digest_value;
+    enum key_format_type key_format_type;
+} Digest;
+
 typedef struct encryption_key_information
 {
     TextString *unique_identifier;

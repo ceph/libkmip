@@ -5449,6 +5449,23 @@ kmip_free_protection_storage_masks(KMIP *ctx, ProtectionStorageMasks *value)
 }
 
 void
+kmip_free_digest(KMIP *ctx, Digest *value)
+{
+    if(value != NULL)
+    {
+        if(value->digest_value != NULL)
+        {
+            kmip_free_byte_string(ctx, value->digest_value);
+            value->digest_value = NULL;
+        }
+	value->hashing_algorithm = 0;
+	value->key_format_type = 0;
+    }
+
+    return;
+}
+
+void
 kmip_free_attribute(KMIP *ctx, Attribute *value)
 {
     if(value != NULL)
@@ -5499,7 +5516,9 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 *(int32*)value->value = 0;
                 break;
 
-                // case KMIP_ATTR_DIGEST:	XXX how to hack struct?
+                case KMIP_ATTR_DIGEST:
+                kmip_free_digest(ctx, value->value);
+                break;
 
                 case KMIP_ATTR_OPERATION_POLICY_NAME:
                 kmip_free_text_string(ctx, value->value);
@@ -9589,6 +9608,42 @@ kmip_encode_interval(KMIP *ctx, enum tag t, uint32 value)
 }
 
 int
+kmip_encode_digest(KMIP *ctx, const Digest *value)
+{
+    int result = 0;
+
+    result = kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_DIGEST, KMIP_TYPE_STRUCTURE));
+    CHECK_RESULT(ctx, result);
+
+    uint8 *length_index = ctx->index;
+    uint8 *value_index = ctx->index += 4;
+
+    result = kmip_encode_enum(ctx, KMIP_TAG_HASHING_ALGORITHM, value->hashing_algorithm);
+    CHECK_RESULT(ctx, result);
+
+    if(value->digest_value != NULL)
+    {
+	result = kmip_encode_byte_string(ctx, KMIP_TAG_DIGEST_VALUE, value->digest_value);
+	CHECK_RESULT(ctx, result);
+    }
+
+    if(value->key_format_type != 0)
+    {
+        result = kmip_encode_enum(ctx, KMIP_TAG_KEY_FORMAT_TYPE, value->key_format_type);
+        CHECK_RESULT(ctx, result);
+    }
+
+    uint8 *curr_index = ctx->index;
+    ctx->index = length_index;
+
+    kmip_encode_int32_be(ctx, curr_index - value_index);
+
+    ctx->index = curr_index;
+
+    return(KMIP_OK);
+}
+
+int
 kmip_encode_name(KMIP *ctx, const Name *value)
 {
     /* TODO (ph) Check for value == NULL? */
@@ -9692,7 +9747,7 @@ kmip_encode_attribute_name(KMIP *ctx, enum attribute_type value)
         attribute_name.size = 20;
         break;
 
-       case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
+        case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
         attribute_name.value = "Cryptographic Parameters";
         attribute_name.size = 24;
         break;
@@ -10008,7 +10063,18 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
         break;
 
-        // case KMIP_ATTR_DIGEST:       XXX how to hack struct?
+        case KMIP_ATTR_DIGEST:
+	// messy...
+        result = kmip_encode_digest(ctx, (const Digest*)value->value);
+        CHECK_RESULT(ctx, result);
+        
+        curr_index = ctx->index;
+        ctx->index = tag_index;
+        
+        result = kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_ATTRIBUTE_VALUE, KMIP_TYPE_STRUCTURE));
+        
+        ctx->index = curr_index;
+	break;
 
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
@@ -10219,7 +10285,11 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
-        // case KMIP_ATTR_DIGEST:	XXX how to hack struct?
+        case KMIP_ATTR_DIGEST:
+        {
+            result = kmip_encode_digest(ctx, (Digest*)value->value);
+        }
+        break;
 
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         {
@@ -12471,6 +12541,43 @@ kmip_decode_date_time(KMIP *ctx, enum tag t, uint64 *value)
 }
 
 int
+kmip_decode_digest(KMIP *ctx, Digest *value)
+{
+    CHECK_BUFFER_FULL(ctx, 8);
+
+    int result = 0;
+    int32 tag_type = 0;
+    uint32 length = 0;
+
+    kmip_decode_int32_be(ctx, &tag_type);
+    CHECK_TAG_TYPE(ctx, tag_type, KMIP_TAG_DIGEST, KMIP_TYPE_STRUCTURE);
+
+    kmip_decode_int32_be(ctx, &length);
+    CHECK_BUFFER_FULL(ctx, length);
+
+    result = kmip_decode_enum(ctx, KMIP_TAG_HASHING_ALGORITHM, &value->hashing_algorithm);
+    CHECK_RESULT(ctx, result);
+    CHECK_ENUM(ctx, KMIP_TAG_HASHING_ALGORITHM, value->hashing_algorithm);
+    
+    if(kmip_is_tag_next(ctx, KMIP_TAG_DIGEST_VALUE))
+    {
+	value->digest_value = ctx->calloc_func(ctx->state, 1, sizeof(ByteString));
+	CHECK_NEW_MEMORY(ctx, value->digest_value, sizeof(ByteString), "Digest byte string");
+	result = kmip_decode_byte_string(ctx, KMIP_TAG_DIGEST_VALUE, value->digest_value);
+	CHECK_RESULT(ctx, result);
+    }
+    
+    if(kmip_is_tag_next(ctx, KMIP_TAG_KEY_FORMAT_TYPE))
+    {
+        result = kmip_decode_enum(ctx, KMIP_TAG_KEY_FORMAT_TYPE, &value->key_format_type);
+        CHECK_RESULT(ctx, result);
+        CHECK_ENUM(ctx, KMIP_TAG_KEY_FORMAT_TYPE, value->key_format_type);
+    }
+
+    return(KMIP_OK);
+}
+
+int
 kmip_decode_interval(KMIP *ctx, enum tag t, uint32 *value)
 {
     CHECK_BUFFER_FULL(ctx, 16);
@@ -12873,6 +12980,28 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
         CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "CryptographicLength integer");
         result = kmip_decode_integer(ctx, t, (int32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+        
+        case KMIP_ATTR_DIGEST:
+	// same issues as Name above, all the same uglies.
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(Digest));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(Digest), "Digest structure");
+        if(kmip_is_tag_type_next(ctx, KMIP_TAG_ATTRIBUTE_VALUE, KMIP_TYPE_STRUCTURE))
+        {
+            kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_DIGEST, KMIP_TYPE_STRUCTURE));
+            ctx->index = tag_index;
+            
+            result = kmip_decode_digest(ctx, (Digest*)value->value);
+            
+            curr_index = ctx->index;
+            ctx->index = tag_index;
+            
+            kmip_encode_int32_be(ctx, TAG_TYPE(KMIP_TAG_ATTRIBUTE_VALUE, KMIP_TYPE_STRUCTURE));
+            ctx->index = curr_index;
+	} else {
+            result = KMIP_TAG_MISMATCH;
+	}
         CHECK_RESULT(ctx, result);
         break;
         
