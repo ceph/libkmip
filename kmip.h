@@ -823,6 +823,7 @@ enum tag
     KMIP_TAG_X509_CERTIFICATE_IDENTIFIER      = 0x4200B5,
     KMIP_TAG_X509_CERTIFICATE_ISSUER          = 0x4200B6,
     KMIP_TAG_X509_CERTIFICATE_SUBJECT         = 0x4200B7,
+    /* KMIP 1.2 */
     KMIP_TAG_KEY_VALUE_LOCATION               = 0x4200B8,
     KMIP_TAG_KEY_VALUE_LOCATION_VALUE         = 0x4200B9,
     KMIP_TAG_KEY_VALUE_LOCATION_TYPE          = 0x4200BA,
@@ -830,7 +831,6 @@ enum tag
     KMIP_TAG_ORIGINAL_CREATION_DATE           = 0x4200BC,
     KMIP_TAG_PGP_KEY                          = 0x4200BD,
     KMIP_TAG_PGP_KEY_VERSION                  = 0x4200BE,
-    /* KMIP 1.2 */
     KMIP_TAG_ALTERNATIVE_NAME                 = 0x4200BF,
     KMIP_TAG_ALTERNATIVE_NAME_VALUE           = 0x4200C0,
     KMIP_TAG_ALTERNATIVE_NAME_TYPE            = 0x4200C1,
@@ -881,7 +881,6 @@ enum tag
     KMIP_TAG_SERVER_URI                       = 0x4200ED,
     KMIP_TAG_SERVER_PORT                      = 0x4200EE,
     KMIP_TAG_STREAMING_CAPABILITY             = 0x4200EF,
-    /* KMIP 1.4 */
     KMIP_TAG_ASYNCHRONOUS_CAPABILITY          = 0x4200F0,
     KMIP_TAG_ATTESTATION_CAPABILITY           = 0x4200F1,
     KMIP_TAG_UNWRAP_MODE                      = 0x4200F2,
@@ -890,6 +889,7 @@ enum tag
     KMIP_TAG_RNG_MODE                         = 0x4200F5,
     KMIP_TAG_CLIENT_REGISTRATION_METHOD       = 0x4200F6,
     KMIP_TAG_CAPABILITY_INFORMATION           = 0x4200F7,
+    /* KMIP 1.4 */
     KMIP_TAG_KEY_WRAP_TYPE                    = 0x4200F8,
     KMIP_TAG_BATCH_UNDO_CAPABILITY            = 0x4200F9,
     KMIP_TAG_BATCH_CONTINUE_CAPABILITY        = 0x4200FA,
