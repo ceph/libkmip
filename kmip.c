@@ -165,37 +165,56 @@ Enumeration Utilities
 */
 
 static const char *kmip_attribute_names[] = {
-    "Attestation Type",
-    "BatchErrorContinuation Option",
-    "BlockCipher Mode",
-    "Credential Type",
-    "Cryptographic Algorithm",
-    "Cryptographic Usage Mask",
-    "DigitalSignature Algorithm",
-    "Encoding Option",
-    "Hashing Algorithm",
-    "Key Compression Type",
-    "Key Format Type",
-    "Key Role Type",
-    "Key Wrap Type",
-    "Mask Generator",
-    "Name Type",
+    "Unique Identifier",
+    "Name",
     "Object Type",
-    "Operation",
-    "Padding Method",
-    "Protection Storage Mask",
-    "Result Reason",
-    "Result Status",
+    "Cryptographic Algorithm",
+    "Cryptographic Length",
+    "Cryptographic Parameters",
+    "Cryptographic Domain Parameters",
+    "Certificate Type",
+    "Certificate Length",
+    "X.509 Certificate Identifier",
+    "X.509 Certificate Subject",
+    "X.509 Certificate Issuer",
+    "Certificate Identifier",
+    "Certificate Subject",
+    "Certificate Issuer",
+    "Digital Signature Algorithm",
+    "Digest",
+    "Operation Policy Name",
+    "Cryptographic Usage Mask",
+    "Lease Time",
+    "Usage Limits",
     "State",
-    "Tag", /*?*/
-    "Type", /*?*/
-    "Wrapping Method",
-    "Maximum Items",
-    "Storage Status Mask",
-    "Object Group Member",
-    "Offset Items",
-    "Located Items",
     "Initial Date",
+    "Activation Date",
+    "Process Start Date",
+    "Protect Stop Date",
+    "Deactivation Date",
+    "Destroy Date",
+    "Compromise Occurrence Date",
+    "Compromise Date",
+    "Revocation Reason",
+    "Archive Date",
+    "Object Group",
+    "Fresh",
+    "Link",
+    "Application Specific Information",
+    "Contact Information",
+    "Last Change Date",
+    "Alternative Name",
+    "Key Value Present",
+    "Key Value Location",
+    "Original Creation Date",
+    "Random Number Generator",
+    "PKCS#12 Friendly Name",
+    "Description",
+    "Comment",
+    "Sensitive",
+    "Always Sensitive",
+    "Extractable",
+    "Never Extractable",
     "Unknown" /* Catch all for unsupported enumerations */
 };
 
@@ -204,132 +223,208 @@ kmip_get_enum_string_index(enum tag t)
 {
     switch(t)
     {
-        case KMIP_TAG_ATTESTATION_TYPE:
+        case KMIP_TAG_UNIQUE_IDENTIFIER:
         return(0);
         break;
-        
-        case KMIP_TAG_BATCH_ERROR_CONTINUATION_OPTION:
+
+        case KMIP_TAG_NAME:
         return(1);
         break;
-        
-        case KMIP_TAG_BLOCK_CIPHER_MODE:
+
+        case KMIP_TAG_OBJECT_TYPE:
         return(2);
         break;
-        
-        case KMIP_TAG_CREDENTIAL_TYPE:
+
+        case KMIP_TAG_CRYPTOGRAPHIC_ALGORITHM:
         return(3);
         break;
-        
-        case KMIP_TAG_CRYPTOGRAPHIC_ALGORITHM:
+
+        case KMIP_TAG_CRYPTOGRAPHIC_LENGTH:
         return(4);
         break;
-        
-        case KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK:
+
+        case KMIP_TAG_CRYPTOGRAPHIC_PARAMETERS:
         return(5);
         break;
-        
-        case KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM:
+
+        case KMIP_TAG_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:
         return(6);
         break;
-        
-        case KMIP_TAG_ENCODING_OPTION:
+
+        case KMIP_TAG_CERTIFICATE_TYPE:
         return(7);
         break;
-        
-        case KMIP_TAG_HASHING_ALGORITHM:
+
+        case KMIP_TAG_CERTIFICATE_LENGTH:
         return(8);
         break;
-        
-        case KMIP_TAG_KEY_COMPRESSION_TYPE:
+
+        case KMIP_TAG_X509_CERTIFICATE_IDENTIFIER:
         return(9);
         break;
-        
-        case KMIP_TAG_KEY_FORMAT_TYPE:
+
+        case KMIP_TAG_X509_CERTIFICATE_SUBJECT:
         return(10);
         break;
-        
-        case KMIP_TAG_KEY_ROLE_TYPE:
+
+        case KMIP_TAG_X509_CERTIFICATE_ISSUER:
         return(11);
         break;
-        
-        case KMIP_TAG_KEY_WRAP_TYPE:
+
+        case KMIP_TAG_CERTIFICATE_IDENTIFIER:
         return(12);
         break;
-        
-        case KMIP_TAG_MASK_GENERATOR:
+
+        case KMIP_TAG_CERTIFICATE_SUBJECT:
         return(13);
         break;
-        
-        case KMIP_TAG_NAME_TYPE:
+
+        case KMIP_TAG_CERTIFICATE_ISSUER:
         return(14);
         break;
-        
-        case KMIP_TAG_OBJECT_TYPE:
+
+        case KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM:
         return(15);
         break;
-        
-        case KMIP_TAG_OPERATION:
+
+        case KMIP_TAG_DIGEST:
         return(16);
         break;
-        
-        case KMIP_TAG_PADDING_METHOD:
+
+        case KMIP_TAG_OPERATION_POLICY_NAME:
         return(17);
         break;
 
-        case KMIP_TAG_PROTECTION_STORAGE_MASK:
+        case KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK:
         return(18);
         break;
-        
-        case KMIP_TAG_RESULT_REASON:
+
+        case KMIP_TAG_LEASE_TIME:
         return(19);
         break;
-        
-        case KMIP_TAG_RESULT_STATUS:
+
+        case KMIP_TAG_USAGE_LIMITS:
         return(20);
         break;
-        
+
         case KMIP_TAG_STATE:
         return(21);
         break;
-        
-        case KMIP_TAG_TAG:
+
+        case KMIP_TAG_INITIAL_DATE:
         return(22);
         break;
-        
-        case KMIP_TAG_TYPE:
+
+        case KMIP_TAG_ACTIVATION_DATE:
         return(23);
         break;
-        
-        case KMIP_TAG_WRAPPING_METHOD:
+
+        case KMIP_TAG_PROCESS_START_DATE:
         return(24);
         break;
 
-	case KMIP_TAG_MAXIMUM_ITEMS:
-	return(25);
-	break;
+        case KMIP_TAG_PROTECT_STOP_DATE:
+        return(25);
+        break;
 
-	case KMIP_TAG_STORAGE_STATUS_MASK:
-	return(26);
-	break;
+        case KMIP_TAG_DEACTIVATION_DATE:
+        return(26);
+        break;
 
-	case KMIP_TAG_OBJECT_GROUP_MEMBER:
-	return(27);
-	break;
+        case KMIP_TAG_DESTROY_DATE:
+        return(27);
+        break;
 
-	case KMIP_TAG_OFFSET_ITEMS:
-	return(28);
-	break;
+        case KMIP_TAG_COMPROMISE_OCCURRENCE_DATE:
+        return(28);
+        break;
 
-	case KMIP_TAG_LOCATED_ITEMS:
-	return(29);
-	break;
+        case KMIP_TAG_COMPROMISE_DATE:
+        return(29);
+        break;
 
-	case KMIP_TAG_INITIAL_DATE:
-	return(30);
-	break;
-        
-        default:
+        case KMIP_TAG_REVOCATION_REASON:
+        return(30);
+        break;
+
+        case KMIP_TAG_ARCHIVE_DATE:
         return(31);
+        break;
+
+        case KMIP_TAG_OBJECT_GROUP:
+        return(32);
+        break;
+
+        case KMIP_TAG_FRESH:
+        return(33);
+        break;
+
+        case KMIP_TAG_LINK:
+        return(34);
+        break;
+
+        case KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION:
+        return(35);
+        break;
+
+        case KMIP_TAG_CONTACT_INFORMATION:
+        return(36);
+        break;
+
+        case KMIP_TAG_LAST_CHANGE_DATE:
+        return(37);
+        break;
+
+        case KMIP_TAG_ALTERNATIVE_NAME:
+        return(38);
+        break;
+
+        case KMIP_TAG_KEY_VALUE_PRESENT:
+        return(39);
+        break;
+
+        case KMIP_TAG_KEY_VALUE_LOCATION:
+        return(40);
+        break;
+
+        case KMIP_TAG_ORIGINAL_CREATION_DATE:
+        return(41);
+        break;
+
+        case KMIP_TAG_RANDOM_NUMBER_GENERATOR:
+        return(42);
+        break;
+
+        case KMIP_TAG_PKCS_12_FRIENDLY_NAME:
+        return(43);
+        break;
+
+        case KMIP_TAG_DESCRIPTION:
+        return(44);
+        break;
+
+        case KMIP_TAG_COMMENT:
+        return(45);
+        break;
+
+        case KMIP_TAG_SENSITIVE:
+        return(46);
+        break;
+
+        case KMIP_TAG_ALWAYS_SENSITIVE:
+        return(47);
+        break;
+
+        case KMIP_TAG_EXTRACTABLE:
+        return(48);
+        break;
+
+        case KMIP_TAG_NEVER_EXTRACTABLE:
+        return(49);
+        break;
+
+        default:
+        return(50);
         break;
     };
 }
@@ -1619,10 +1714,51 @@ kmip_is_attribute_tag(uint32 value)
         KMIP_TAG_OBJECT_TYPE,
         KMIP_TAG_CRYPTOGRAPHIC_ALGORITHM,
         KMIP_TAG_CRYPTOGRAPHIC_LENGTH,
+        KMIP_TAG_CRYPTOGRAPHIC_PARAMETERS,
+        KMIP_TAG_CRYPTOGRAPHIC_DOMAIN_PARAMETERS,
+        KMIP_TAG_CERTIFICATE_TYPE,
+        KMIP_TAG_CERTIFICATE_LENGTH,
+        KMIP_TAG_X509_CERTIFICATE_IDENTIFIER,
+        KMIP_TAG_X509_CERTIFICATE_SUBJECT,
+        KMIP_TAG_X509_CERTIFICATE_ISSUER,
+        KMIP_TAG_CERTIFICATE_IDENTIFIER,
+        KMIP_TAG_CERTIFICATE_SUBJECT,
+        KMIP_TAG_CERTIFICATE_ISSUER,
+        KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM,
+        KMIP_TAG_DIGEST,
         KMIP_TAG_OPERATION_POLICY_NAME,
         KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK,
+        KMIP_TAG_LEASE_TIME,
+        KMIP_TAG_USAGE_LIMITS,
+        KMIP_TAG_STATE,
         KMIP_TAG_INITIAL_DATE,
-        KMIP_TAG_STATE
+        KMIP_TAG_ACTIVATION_DATE,
+        KMIP_TAG_PROCESS_START_DATE,
+        KMIP_TAG_PROTECT_STOP_DATE,
+        KMIP_TAG_DEACTIVATION_DATE,
+        KMIP_TAG_DESTROY_DATE,
+        KMIP_TAG_COMPROMISE_OCCURRENCE_DATE,
+        KMIP_TAG_COMPROMISE_DATE,
+        KMIP_TAG_REVOCATION_REASON,
+        KMIP_TAG_ARCHIVE_DATE,
+        KMIP_TAG_OBJECT_GROUP,
+        KMIP_TAG_FRESH,
+        KMIP_TAG_LINK,
+        KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION,
+        KMIP_TAG_CONTACT_INFORMATION,
+        KMIP_TAG_LAST_CHANGE_DATE,
+        KMIP_TAG_ALTERNATIVE_NAME,
+        KMIP_TAG_KEY_VALUE_PRESENT,
+        KMIP_TAG_KEY_VALUE_LOCATION,
+        KMIP_TAG_ORIGINAL_CREATION_DATE,
+        KMIP_TAG_RANDOM_NUMBER_GENERATOR,
+        KMIP_TAG_PKCS_12_FRIENDLY_NAME,
+        KMIP_TAG_DESCRIPTION,
+        KMIP_TAG_COMMENT,
+        KMIP_TAG_SENSITIVE,
+        KMIP_TAG_ALWAYS_SENSITIVE,
+        KMIP_TAG_EXTRACTABLE,
+        KMIP_TAG_NEVER_EXTRACTABLE
     };
 
     for(size_t i = 0; i < ARRAY_LENGTH(attribute_tags); i++)
@@ -2896,39 +3032,207 @@ kmip_print_attribute_type_enum(enum attribute_type value)
         case KMIP_ATTR_UNIQUE_IDENTIFIER:
         printf("Unique Identifier");
         break;
-        
+
         case KMIP_ATTR_NAME:
         printf("Name");
         break;
-        
+
         case KMIP_ATTR_OBJECT_TYPE:
         printf("Object Type");
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_ALGORITHM:
         printf("Cryptographic Algorithm");
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
         printf("Cryptographic Length");
         break;
-        
+
+        case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
+        printf("Cryptographic Parameters");
+        break;
+
+        case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:
+        printf("Cryptographic Domain Parameters");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        printf("Certificate Type");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        printf("Certificate Length");
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:
+        printf("X.509 Certificate Identifier");
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:
+        printf("X.509 Certificate Subject");
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_ISSUER:
+        printf("X.509 Certificate Issuer");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_IDENTIFIER:
+        printf("Certificate Identifier");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_SUBJECT:
+        printf("Certificate Subject");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_ISSUER:
+        printf("Certificate Issuer");
+        break;
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        printf("Digital Signature Algorithm");
+        break;
+
+        case KMIP_ATTR_DIGEST:
+        printf("Digest");
+        break;
+
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         printf("Operation Policy Name");
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         printf("Cryptographic Usage Mask");
         break;
-        
+
+        case KMIP_ATTR_LEASE_TIME:
+        printf("Lease Time");
+        break;
+
+        case KMIP_ATTR_USAGE_LIMITS:
+        printf("Usage Limits");
+        break;
+
         case KMIP_ATTR_STATE:
         printf("State");
         break;
-        
+
         case KMIP_ATTR_INITIAL_DATE:
         printf("Initial Date");
         break;
-        
+
+        case KMIP_ATTR_ACTIVATION_DATE:
+        printf("Activation Date");
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        printf("Process Start Date");
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        printf("Protect Stop Date");
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        printf("Deactivation Date");
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        printf("Destroy Date");
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        printf("Compromise Occurrence Date");
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        printf("Compromise Date");
+        break;
+
+        case KMIP_ATTR_REVOCATION_REASON:
+        printf("Revocation Reason");
+        break;
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        printf("Archive Date");
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        printf("Object Group");
+        break;
+
+        case KMIP_ATTR_FRESH:
+        printf("Fresh");
+        break;
+
+        case KMIP_ATTR_LINK:
+        printf("Link");
+        break;
+
+        case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
+        printf("Application Specific Information");
+        break;
+
+        case KMIP_ATTR_CONTACT_INFORMATION:
+        printf("Contact Information");
+        break;
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        printf("Last Change Date");
+        break;
+
+        case KMIP_ATTR_CUSTOM_ATTRIBUTE:
+        printf("* X-* Y-* Custom Attribute");
+        break;
+
+        case KMIP_ATTR_ALTERNATIVE_NAME:
+        printf("Alternative Name");
+        break;
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        printf("Key Value Present");
+        break;
+
+        case KMIP_ATTR_KEY_VALUE_LOCATION:
+        printf("Key Value Location");
+        break;
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        printf("Original Creation Date");
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        printf("Random Number Generator");
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        printf("PKCS#12 Friendly Name");
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        printf("Description");
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        printf("Comment");
+        break;
+
+        case KMIP_ATTR_SENSITIVE:
+        printf("Sensitive");
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        printf("Always Sensitive");
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        printf("Extractable");
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        printf("Never Extractable");
+        break;
+
         default:
         printf("Unknown");
         break;
@@ -3057,6 +3361,31 @@ kmip_print_block_cipher_mode_enum(enum block_cipher_mode value)
         
         case KMIP_BLOCK_AEAD:
         printf("AEAD");
+        break;
+        
+        default:
+        printf("Unknown");
+        break;
+    };
+}
+
+void
+kmip_print_certificate_type_enum(enum certificate_type value)
+{
+    if(value == 0)
+    {
+        printf("-");
+        return;
+    }
+    
+    switch(value)
+    {
+        case KMIP_CERT_X509:
+        printf("X.509");
+        break;
+        
+        case KMIP_CERT_PGP:
+        printf("PGP");
         break;
         
         default:
@@ -4084,44 +4413,154 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
         printf("\n");
         kmip_print_text_string(indent + 2, "Unique Identifier", value);
         break;
-        
+
         case KMIP_ATTR_NAME:
         printf("\n");
         kmip_print_name(indent + 2, value);
         break;
-        
+
         case KMIP_ATTR_OBJECT_TYPE:
         kmip_print_object_type_enum(*(enum object_type *)value);
         printf("\n");
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_ALGORITHM:
         kmip_print_cryptographic_algorithm_enum(*(enum cryptographic_algorithm *)value);
         printf("\n");
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
         printf("%d\n", *(int32 *)value);
         break;
-        
+
+        // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:	XXX how to hack struct?
+        // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:	XXX how to hack struct?
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        kmip_print_certificate_type_enum(*(enum certificate_type *)value);
+        printf("\n");
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        printf("%d\n", *(int32 *)value);
+        break;
+
+        // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_ISSUER:	XXX how to hack struct?
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        kmip_print_digital_signature_algorithm_enum(*(enum digital_signature_algorithm *)value);
+        printf("\n");
+        break;
+
+        // case KMIP_ATTR_DIGEST:	XXX how to hack struct?
+
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         printf("\n");
         kmip_print_text_string(indent + 2, "Operation Policy Name", value);
         break;
-        
+
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         kmip_print_cryptographic_usage_mask_enums(indent + 2, *(int32 *)value);
         break;
-        
+
+        // case KMIP_ATTR_LEASE_TIME:	XXX how to hack interval?
+        // case KMIP_ATTR_USAGE_LIMITS:	XXX how to hack struct?
+
         case KMIP_ATTR_STATE:
         kmip_print_state_enum(*(enum state *)value);
         printf("\n");
         break;
-        
+
         case KMIP_ATTR_INITIAL_DATE:
         kmip_print_date_time(*(int64*)value);
-        printf("\n");
         break;
+
+        case KMIP_ATTR_ACTIVATION_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        // case KMIP_ATTR_REVOCATION_REASON:	XXX how to hack struct?
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        printf("\n");
+        kmip_print_text_string(indent + 2, "Object Group", value);
+        break;
+
+        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        // case KMIP_ATTR_LINK:	XXX how to hack struct?
+        // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
+        // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
+        // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
+        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+        // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        kmip_print_date_time(*(int64*)value);
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        printf("\n");
+        kmip_print_text_string(indent + 2, "Random Number Generator", value);
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        printf("\n");
+        kmip_print_text_string(indent + 2, "PKCS#12 Friendly Name", value);
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        printf("\n");
+        kmip_print_text_string(indent + 2, "Description", value);
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        printf("\n");
+        kmip_print_text_string(indent + 2, "Comment", value);
+        break;
+
+        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
+        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
         
         default:
         printf("Unknown\n");
@@ -5021,38 +5460,142 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 case KMIP_ATTR_UNIQUE_IDENTIFIER:
                 kmip_free_text_string(ctx, value->value);
                 break;
-                
+
                 case KMIP_ATTR_NAME:
                 kmip_free_name(ctx, value->value);
                 break;
-                
+
                 case KMIP_ATTR_OBJECT_TYPE:
                 *(int32*)value->value = 0;
                 break;
-                
+
                 case KMIP_ATTR_CRYPTOGRAPHIC_ALGORITHM:
                 *(int32*)value->value = 0;
                 break;
-                
+
                 case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
-                *(int32*)value->value = KMIP_UNSET;
+                *(int32 *)value->value = KMIP_UNSET;
                 break;
-                
+
+                // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:	XXX how to hack struct?
+                // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:	XXX how to hack struct?
+
+                case KMIP_ATTR_CERTIFICATE_TYPE:
+                *(int32*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_CERTIFICATE_LENGTH:
+                *(int32 *)value->value = 0;
+                break;
+
+                // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+                // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+                // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:	XXX how to hack struct?
+                // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+                // case KMIP_ATTR_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+                // case KMIP_ATTR_CERTIFICATE_ISSUER:	XXX how to hack struct?
+
+                case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+                *(int32*)value->value = 0;
+                break;
+
+                // case KMIP_ATTR_DIGEST:	XXX how to hack struct?
+
                 case KMIP_ATTR_OPERATION_POLICY_NAME:
                 kmip_free_text_string(ctx, value->value);
                 break;
-                
+
                 case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
-                *(int32*)value->value = KMIP_UNSET;
+                *(int32 *)value->value = KMIP_UNSET;
                 break;
-                
+
+                // case KMIP_ATTR_LEASE_TIME:	XXX how to hack interval?
+                // case KMIP_ATTR_USAGE_LIMITS:	XXX how to hack struct?
+
                 case KMIP_ATTR_STATE:
                 *(int32*)value->value = 0;
                 break;
-                
+
                 case KMIP_ATTR_INITIAL_DATE:
                 *(int64*)value->value = 0;
                 break;
+
+                case KMIP_ATTR_ACTIVATION_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_PROCESS_START_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_PROTECT_STOP_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_DEACTIVATION_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_DESTROY_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_COMPROMISE_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                // case KMIP_ATTR_REVOCATION_REASON:	XXX how to hack struct?
+
+                case KMIP_ATTR_ARCHIVE_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_OBJECT_GROUP:
+                kmip_free_text_string(ctx, value->value);
+                break;
+
+                // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+                // case KMIP_ATTR_LINK:	XXX how to hack struct?
+                // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
+                // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
+
+                case KMIP_ATTR_LAST_CHANGE_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
+                // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
+                // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+                // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
+
+                case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+                *(int64*)value->value = 0;
+                break;
+
+                case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+                kmip_free_text_string(ctx, value->value);
+                break;
+
+                case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+                kmip_free_text_string(ctx, value->value);
+                break;
+
+                case KMIP_ATTR_DESCRIPTION:
+                kmip_free_text_string(ctx, value->value);
+                break;
+
+                case KMIP_ATTR_COMMENT:
+                kmip_free_text_string(ctx, value->value);
+                break;
+
+                // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
+                // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
+                // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
+                // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
                 
                 default:
                 /* NOTE (ph) Hitting this case means that we don't know what the */
@@ -6365,6 +6908,11 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
     {
         case KMIP_ATTR_UNIQUE_IDENTIFIER:
         case KMIP_ATTR_OPERATION_POLICY_NAME:
+        case KMIP_ATTR_OBJECT_GROUP:
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        case KMIP_ATTR_DESCRIPTION:
+        case KMIP_ATTR_COMMENT:
         {
             copy->value = kmip_deep_copy_text_string(ctx, (TextString *)value->value);
             if(copy->value == NULL)
@@ -6387,6 +6935,9 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_OBJECT_TYPE:
         case KMIP_ATTR_CRYPTOGRAPHIC_ALGORITHM:
         case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         case KMIP_ATTR_STATE:
         {
@@ -6399,6 +6950,16 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         } break;
 
         case KMIP_ATTR_INITIAL_DATE:
+        case KMIP_ATTR_ACTIVATION_DATE:
+        case KMIP_ATTR_PROCESS_START_DATE:
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        case KMIP_ATTR_DESTROY_DATE:
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        case KMIP_ATTR_COMPROMISE_DATE:
+        case KMIP_ATTR_ARCHIVE_DATE:
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
         {
             copy->value = kmip_deep_copy_int64(ctx, (int64 *)value->value);
             if(copy->value == NULL)
@@ -6407,6 +6968,31 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
                 return(NULL);
             }
         } break;
+
+        // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
+        // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:
+        // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:
+        // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:
+        // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:
+        // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:
+        // case KMIP_ATTR_CERTIFICATE_SUBJECT:
+        // case KMIP_ATTR_CERTIFICATE_ISSUER:
+        // case KMIP_ATTR_DIGEST:
+        // case KMIP_ATTR_LEASE_TIME:
+        // case KMIP_ATTR_USAGE_LIMITS:
+        // case KMIP_ATTR_REVOCATION_REASON:
+        // case KMIP_ATTR_FRESH:
+        // case KMIP_ATTR_LINK:
+        // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
+        // case KMIP_ATTR_CONTACT_INFORMATION:
+        // case KMIP_ATTR_CUSTOM_ATTRIBUTE:
+        // case KMIP_ATTR_ALTERNATIVE_NAME:
+        // case KMIP_ATTR_KEY_VALUE_PRESENT:
+        // case KMIP_ATTR_KEY_VALUE_LOCATION:
+        // case KMIP_ATTR_SENSITIVE:
+        // case KMIP_ATTR_ALWAYS_SENSITIVE:
+        // case KMIP_ATTR_EXTRACTABLE:
+        // case KMIP_ATTR_NEVER_EXTRACTABLE:
 
         default:
         {
@@ -6604,6 +7190,12 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
             switch(a->type)
             {
                 case KMIP_ATTR_UNIQUE_IDENTIFIER:
+                case KMIP_ATTR_OPERATION_POLICY_NAME:
+                case KMIP_ATTR_OBJECT_GROUP:
+                case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+                case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+                case KMIP_ATTR_DESCRIPTION:
+                case KMIP_ATTR_COMMENT:
                 return(kmip_compare_text_string((TextString *)a->value, (TextString *)b->value));
                 break;
                 
@@ -6612,37 +7204,12 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 break;
                 
                 case KMIP_ATTR_OBJECT_TYPE:
-                if(*(int32*)a->value != *(int32*)b->value)
-                {
-                    return(KMIP_FALSE);
-                }
-                break;
-                
                 case KMIP_ATTR_CRYPTOGRAPHIC_ALGORITHM:
-                if(*(int32*)a->value != *(int32*)b->value)
-                {
-                    return(KMIP_FALSE);
-                }
-                break;
-                
                 case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
-                if(*(int32*)a->value != *(int32*)b->value)
-                {
-                    return(KMIP_FALSE);
-                }
-                break;
-                
-                case KMIP_ATTR_OPERATION_POLICY_NAME:
-                return(kmip_compare_text_string((TextString *)a->value, (TextString *)b->value));
-                break;
-                
+                case KMIP_ATTR_CERTIFICATE_TYPE:
+                case KMIP_ATTR_CERTIFICATE_LENGTH:
+                case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
                 case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
-                if(*(int32*)a->value != *(int32*)b->value)
-                {
-                    return(KMIP_FALSE);
-                }
-                break;
-                
                 case KMIP_ATTR_STATE:
                 if(*(int32*)a->value != *(int32*)b->value)
                 {
@@ -6651,12 +7218,47 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 break;
                 
                 case KMIP_ATTR_INITIAL_DATE:
+                case KMIP_ATTR_ACTIVATION_DATE:
+                case KMIP_ATTR_PROCESS_START_DATE:
+                case KMIP_ATTR_PROTECT_STOP_DATE:
+                case KMIP_ATTR_DEACTIVATION_DATE:
+                case KMIP_ATTR_DESTROY_DATE:
+                case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+                case KMIP_ATTR_COMPROMISE_DATE:
+                case KMIP_ATTR_ARCHIVE_DATE:
+                case KMIP_ATTR_LAST_CHANGE_DATE:
+                case KMIP_ATTR_ORIGINAL_CREATION_DATE:
                 if(*(int64*)a->value != *(int64*)b->value)
                 {
                     return(KMIP_FALSE);
                 }
                 break;
-                
+
+                // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
+                // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:
+                // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:
+                // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:
+                // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:
+                // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:
+                // case KMIP_ATTR_CERTIFICATE_SUBJECT:
+                // case KMIP_ATTR_CERTIFICATE_ISSUER:
+                // case KMIP_ATTR_DIGEST:
+                // case KMIP_ATTR_LEASE_TIME:
+                // case KMIP_ATTR_USAGE_LIMITS:
+                // case KMIP_ATTR_REVOCATION_REASON:
+                // case KMIP_ATTR_FRESH:
+                // case KMIP_ATTR_LINK:
+                // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
+                // case KMIP_ATTR_CONTACT_INFORMATION:
+                // case KMIP_ATTR_CUSTOM_ATTRIBUTE:
+                // case KMIP_ATTR_ALTERNATIVE_NAME:
+                // case KMIP_ATTR_KEY_VALUE_PRESENT:
+                // case KMIP_ATTR_KEY_VALUE_LOCATION:
+                // case KMIP_ATTR_SENSITIVE:
+                // case KMIP_ATTR_ALWAYS_SENSITIVE:
+                // case KMIP_ATTR_EXTRACTABLE:
+                // case KMIP_ATTR_NEVER_EXTRACTABLE:
+
                 default:
                 /* NOTE (ph) Unsupported types can't be compared. */
                 return(KMIP_FALSE);
@@ -9089,6 +9691,66 @@ kmip_encode_attribute_name(KMIP *ctx, enum attribute_type value)
         attribute_name.value = "Cryptographic Length";
         attribute_name.size = 20;
         break;
+
+       case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:
+        attribute_name.value = "Cryptographic Parameters";
+        attribute_name.size = 24;
+        break;
+
+        case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:
+        attribute_name.value = "Cryptographic Domain Parameters";
+        attribute_name.size = 31;
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        attribute_name.value = "Certificate Type";
+        attribute_name.size = 16;
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        attribute_name.value = "Certificate Length";
+        attribute_name.size = 18;
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:
+        attribute_name.value = "X.509 Certificate Identifier";
+        attribute_name.size = 28;
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:
+        attribute_name.value = "X.509 Certificate Subject";
+        attribute_name.size = 25;
+        break;
+
+        case KMIP_ATTR_X509_CERTIFICATE_ISSUER:
+        attribute_name.value = "X.509 Certificate Issuer";
+        attribute_name.size = 24;
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_IDENTIFIER:
+        attribute_name.value = "Certificate Identifier";
+        attribute_name.size = 22;
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_SUBJECT:
+        attribute_name.value = "Certificate Subject";
+        attribute_name.size = 19;
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_ISSUER:
+        attribute_name.value = "Certificate Issuer";
+        attribute_name.size = 18;
+        break;
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        attribute_name.value = "Digital Signature Algorithm";
+        attribute_name.size = 27;
+        break;
+
+        case KMIP_ATTR_DIGEST:
+        attribute_name.value = "Digest";
+        attribute_name.size = 6;
+        break;
         
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         attribute_name.value = "Operation Policy Name";
@@ -9098,6 +9760,16 @@ kmip_encode_attribute_name(KMIP *ctx, enum attribute_type value)
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         attribute_name.value = "Cryptographic Usage Mask";
         attribute_name.size = 24;
+        break;
+
+        case KMIP_ATTR_LEASE_TIME:
+        attribute_name.value = "Lease Time";
+        attribute_name.size = 10;
+        break;
+
+        case KMIP_ATTR_USAGE_LIMITS:
+        attribute_name.value = "Usage Limits";
+        attribute_name.size = 12;
         break;
         
         case KMIP_ATTR_STATE:
@@ -9109,7 +9781,141 @@ kmip_encode_attribute_name(KMIP *ctx, enum attribute_type value)
         attribute_name.value = "Initial Date";
         attribute_name.size = 12;
         break;
-        
+        case KMIP_ATTR_ACTIVATION_DATE:
+        attribute_name.value = "Activation Date";
+        attribute_name.size = 15;
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        attribute_name.value = "Process Start Date";
+        attribute_name.size = 18;
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        attribute_name.value = "Protect Stop Date";
+        attribute_name.size = 17;
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        attribute_name.value = "Deactivation Date";
+        attribute_name.size = 17;
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        attribute_name.value = "Destroy Date";
+        attribute_name.size = 12;
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        attribute_name.value = "Compromise Occurrence Date";
+        attribute_name.size = 26;
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        attribute_name.value = "Compromise Date";
+        attribute_name.size = 15;
+        break;
+
+        case KMIP_ATTR_REVOCATION_REASON:
+        attribute_name.value = "Revocation Reason";
+        attribute_name.size = 17;
+        break;
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        attribute_name.value = "Archive Date";
+        attribute_name.size = 12;
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        attribute_name.value = "Object Group";
+        attribute_name.size = 12;
+        break;
+
+        case KMIP_ATTR_FRESH:
+        attribute_name.value = "Fresh";
+        attribute_name.size = 5;
+        break;
+
+        case KMIP_ATTR_LINK:
+        attribute_name.value = "Link";
+        attribute_name.size = 4;
+        break;
+
+        case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
+        attribute_name.value = "Application Specific Information";
+        attribute_name.size = 32;
+        break;
+
+        case KMIP_ATTR_CONTACT_INFORMATION:
+        attribute_name.value = "Contact Information";
+        attribute_name.size = 19;
+        break;
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        attribute_name.value = "Last Change Date";
+        attribute_name.size = 16;
+        break;
+
+        case KMIP_ATTR_ALTERNATIVE_NAME:
+        attribute_name.value = "Alternative Name";
+        attribute_name.size = 16;
+        break;
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        attribute_name.value = "Key Value Present";
+        attribute_name.size = 17;
+        break;
+
+        case KMIP_ATTR_KEY_VALUE_LOCATION:
+        attribute_name.value = "Key Value Location";
+        attribute_name.size = 18;
+        break;
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        attribute_name.value = "Original Creation Date";
+        attribute_name.size = 22;
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        attribute_name.value = "Random Number Generator";
+        attribute_name.size = 23;
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        attribute_name.value = "PKCS#12 Friendly Name";
+        attribute_name.size = 21;
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        attribute_name.value = "Description";
+        attribute_name.size = 11;
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        attribute_name.value = "Comment";
+        attribute_name.size = 7;
+        break;
+
+        case KMIP_ATTR_SENSITIVE:
+        attribute_name.value = "Sensitive";
+        attribute_name.size = 9;
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        attribute_name.value = "Always Sensitive";
+        attribute_name.size = 16;
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        attribute_name.value = "Extractable";
+        attribute_name.size = 11;
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        attribute_name.value = "Never Extractable";
+        attribute_name.size = 17;
+        break;
+
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
         return(KMIP_ERROR_ATTR_UNSUPPORTED);
@@ -9179,7 +9985,31 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_CRYPTOGRAPHIC_LENGTH:
         result = kmip_encode_integer(ctx, t, *(int32 *)value->value);
         break;
-        
+
+        // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:     XXX how to hack struct?
+        // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:      XXX how to hack struct?
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        result = kmip_encode_integer(ctx, t, *(int32 *)value->value);
+        break;
+
+        // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:  XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:     XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:      XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:       XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_SUBJECT:  XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_ISSUER:   XXX how to hack struct?
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
+        break;
+
+        // case KMIP_ATTR_DIGEST:       XXX how to hack struct?
+
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
         break;
@@ -9187,6 +10017,9 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         result = kmip_encode_integer(ctx, t, *(int32 *)value->value);
         break;
+
+        // case KMIP_ATTR_LEASE_TIME:   XXX how to hack interval?
+        // case KMIP_ATTR_USAGE_LIMITS: XXX how to hack struct?
         
         case KMIP_ATTR_STATE:
         result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
@@ -9195,7 +10028,83 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_INITIAL_DATE:
         result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
         break;
-        
+       case KMIP_ATTR_ACTIVATION_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        // case KMIP_ATTR_REVOCATION_REASON:    XXX how to hack struct?
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
+        break;
+
+        // case KMIP_ATTR_FRESH:        XXX how to hack bool?
+        // case KMIP_ATTR_LINK: XXX how to hack struct?
+        // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:     XXX how to hack struct?
+        // case KMIP_ATTR_CONTACT_INFORMATION:  XXX how to hack struct?
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        // case KMIP_ATTR_CUSTOM_ATTRIBUTE:     XXX how to hack custom?
+        // case KMIP_ATTR_ALTERNATIVE_NAME:     XXX how to hack struct?
+        // case KMIP_ATTR_KEY_VALUE_PRESENT:    XXX how to hack bool?
+        // case KMIP_ATTR_KEY_VALUE_LOCATION:   XXX how to hack struct?
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        result = kmip_encode_date_time(ctx, t, *(uint64 *)value->value);
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
+        break;
+
+        // case KMIP_ATTR_SENSITIVE:    XXX how to hack bool?
+        // case KMIP_ATTR_ALWAYS_SENSITIVE:     XXX how to hack bool?
+        // case KMIP_ATTR_EXTRACTABLE:  XXX how to hack bool?
+        // case KMIP_ATTR_NEVER_EXTRACTABLE:    XXX how to hack bool?
+
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
         return(KMIP_ERROR_ATTR_UNSUPPORTED);
@@ -9270,6 +10179,48 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
+        // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:	XXX how to hack struct?
+        // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:	XXX how to hack struct?
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        {
+            result = kmip_encode_enum(
+                ctx,
+                KMIP_TAG_CERTIFICATE_TYPE,
+                *(int32 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        {
+            result = kmip_encode_integer(
+                ctx,
+                KMIP_TAG_CERTIFICATE_LENGTH,
+                *(int32 *)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_ISSUER:	XXX how to hack struct?
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        {
+            result = kmip_encode_enum(
+                ctx,
+                KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM,
+                *(int32 *)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_DIGEST:	XXX how to hack struct?
+
         case KMIP_ATTR_OPERATION_POLICY_NAME:
         {
             result = kmip_encode_text_string(
@@ -9290,6 +10241,9 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
+        // case KMIP_ATTR_LEASE_TIME:   XXX how to hack interval?
+        // case KMIP_ATTR_USAGE_LIMITS: XXX how to hack struct?
+
         case KMIP_ATTR_STATE:
         {
             result = kmip_encode_enum(
@@ -9307,6 +10261,168 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
                 KMIP_TAG_INITIAL_DATE,
                 *(uint64 *)value->value)
             ;
+        }
+        break;
+
+        case KMIP_ATTR_ACTIVATION_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_ACTIVATION_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_PROCESS_START_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_PROTECT_STOP_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_DEACTIVATION_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_DESTROY_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_COMPROMISE_OCCURRENCE_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_COMPROMISE_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_REVOCATION_REASON:	XXX how to hack struct?
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_ARCHIVE_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        {
+            result = kmip_encode_text_string(
+                ctx,
+                KMIP_TAG_OBJECT_GROUP,
+                (TextString*)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        // case KMIP_ATTR_LINK:	XXX how to hack struct?
+        // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
+        // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_LAST_CHANGE_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
+        // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
+        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+        // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        {
+            result = kmip_encode_date_time(
+                ctx,
+                KMIP_TAG_ORIGINAL_CREATION_DATE,
+                *(uint64 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        {
+            result = kmip_encode_text_string(
+                ctx,
+                KMIP_TAG_RANDOM_NUMBER_GENERATOR,
+                (TextString*)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        {
+            result = kmip_encode_text_string(
+                ctx,
+                KMIP_TAG_PKCS_12_FRIENDLY_NAME,
+                (TextString*)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        {
+            result = kmip_encode_text_string(
+                ctx,
+                KMIP_TAG_DESCRIPTION,
+                (TextString*)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        {
+            result = kmip_encode_text_string(
+                ctx,
+                KMIP_TAG_COMMENT,
+                (TextString*)value->value
+            );
         }
         break;
 
@@ -11434,6 +12550,54 @@ kmip_decode_attribute_name(KMIP *ctx, enum attribute_type *value)
     {
         *value = KMIP_ATTR_CRYPTOGRAPHIC_LENGTH;
     }
+    else if((n.size == 24) && (strncmp(n.value, "Cryptographic Parameters", 24) == 0))
+    {
+        *value = KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS;
+    }
+    else if((n.size == 31) && (strncmp(n.value, "Cryptographic Domain Parameters", 31) == 0))
+    {
+        *value = KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS;
+    }
+    else if((n.size == 16) && (strncmp(n.value, "Certificate Type", 16) == 0))
+    {
+        *value = KMIP_ATTR_CERTIFICATE_TYPE;
+    }
+    else if((n.size == 18) && (strncmp(n.value, "Certificate Length", 18) == 0))
+    {
+        *value = KMIP_ATTR_CERTIFICATE_LENGTH;
+    }
+    else if((n.size == 28) && (strncmp(n.value, "X.509 Certificate Identifier", 28) == 0))
+    {
+        *value = KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER;
+    }
+    else if((n.size == 25) && (strncmp(n.value, "X.509 Certificate Subject", 25) == 0))
+    {
+        *value = KMIP_ATTR_X509_CERTIFICATE_SUBJECT;
+    }
+    else if((n.size == 24) && (strncmp(n.value, "X.509 Certificate Issuer", 24) == 0))
+    {
+        *value = KMIP_ATTR_X509_CERTIFICATE_ISSUER;
+    }
+    else if((n.size == 22) && (strncmp(n.value, "Certificate Identifier", 22) == 0))
+    {
+        *value = KMIP_ATTR_CERTIFICATE_IDENTIFIER;
+    }
+    else if((n.size == 19) && (strncmp(n.value, "Certificate Subject", 19) == 0))
+    {
+        *value = KMIP_ATTR_CERTIFICATE_SUBJECT;
+    }
+    else if((n.size == 18) && (strncmp(n.value, "Certificate Issuer", 18) == 0))
+    {
+        *value = KMIP_ATTR_CERTIFICATE_ISSUER;
+    }
+    else if((n.size == 27) && (strncmp(n.value, "Digital Signature Algorithm", 27) == 0))
+    {
+        *value = KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM;
+    }
+    else if((n.size == 6) && (strncmp(n.value, "Digest", 6) == 0))
+    {
+        *value = KMIP_ATTR_DIGEST;
+    }
     else if((n.size == 21) && (strncmp(n.value, "Operation Policy Name", 21) == 0))
     {
         *value = KMIP_ATTR_OPERATION_POLICY_NAME;
@@ -11442,6 +12606,14 @@ kmip_decode_attribute_name(KMIP *ctx, enum attribute_type *value)
     {
         *value = KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK;
     }
+    else if((n.size == 10) && (strncmp(n.value, "Lease Time", 10) == 0))
+    {
+        *value = KMIP_ATTR_LEASE_TIME;
+    }
+    else if((n.size == 12) && (strncmp(n.value, "Usage Limits", 12) == 0))
+    {
+        *value = KMIP_ATTR_USAGE_LIMITS;
+    }
     else if((n.size == 5) && (strncmp(n.value, "State", 5) == 0))
     {
         *value = KMIP_ATTR_STATE;
@@ -11449,6 +12621,114 @@ kmip_decode_attribute_name(KMIP *ctx, enum attribute_type *value)
     else if((n.size == 12) && (strncmp(n.value, "Initial Date", 12) == 0))
     {
         *value = KMIP_ATTR_INITIAL_DATE;
+    }
+    else if((n.size == 15) && (strncmp(n.value, "Activation Date", 15) == 0))
+    {
+        *value = KMIP_ATTR_ACTIVATION_DATE;
+    }
+    else if((n.size == 18) && (strncmp(n.value, "Process Start Date", 18) == 0))
+    {
+        *value = KMIP_ATTR_PROCESS_START_DATE;
+    }
+    else if((n.size == 17) && (strncmp(n.value, "Protect Stop Date", 17) == 0))
+    {
+        *value = KMIP_ATTR_PROTECT_STOP_DATE;
+    }
+    else if((n.size == 17) && (strncmp(n.value, "Deactivation Date", 17) == 0))
+    {
+        *value = KMIP_ATTR_DEACTIVATION_DATE;
+    }
+    else if((n.size == 12) && (strncmp(n.value, "Destroy Date", 12) == 0))
+    {
+        *value = KMIP_ATTR_DESTROY_DATE;
+    }
+    else if((n.size == 26) && (strncmp(n.value, "Compromise Occurrence Date", 26) == 0))
+    {
+        *value = KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE;
+    }
+    else if((n.size == 15) && (strncmp(n.value, "Compromise Date", 15) == 0))
+    {
+        *value = KMIP_ATTR_COMPROMISE_DATE;
+    }
+    else if((n.size == 17) && (strncmp(n.value, "Revocation Reason", 17) == 0))
+    {
+        *value = KMIP_ATTR_REVOCATION_REASON;
+    }
+    else if((n.size == 12) && (strncmp(n.value, "Archive Date", 12) == 0))
+    {
+        *value = KMIP_ATTR_ARCHIVE_DATE;
+    }
+    else if((n.size == 12) && (strncmp(n.value, "Object Group", 12) == 0))
+    {
+        *value = KMIP_ATTR_OBJECT_GROUP;
+    }
+    else if((n.size == 5) && (strncmp(n.value, "Fresh", 5) == 0))
+    {
+        *value = KMIP_ATTR_FRESH;
+    }
+    else if((n.size == 4) && (strncmp(n.value, "Link", 4) == 0))
+    {
+        *value = KMIP_ATTR_LINK;
+    }
+    else if((n.size == 32) && (strncmp(n.value, "Application Specific Information", 32) == 0))
+    {
+        *value = KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION;
+    }
+    else if((n.size == 19) && (strncmp(n.value, "Contact Information", 19) == 0))
+    {
+        *value = KMIP_ATTR_CONTACT_INFORMATION;
+    }
+    else if((n.size == 16) && (strncmp(n.value, "Last Change Date", 16) == 0))
+    {
+        *value = KMIP_ATTR_LAST_CHANGE_DATE;
+    }
+    else if((n.size == 16) && (strncmp(n.value, "Alternative Name", 16) == 0))
+    {
+        *value = KMIP_ATTR_ALTERNATIVE_NAME;
+    }
+    else if((n.size == 17) && (strncmp(n.value, "Key Value Present", 17) == 0))
+    {
+        *value = KMIP_ATTR_KEY_VALUE_PRESENT;
+    }
+    else if((n.size == 18) && (strncmp(n.value, "Key Value Location", 18) == 0))
+    {
+        *value = KMIP_ATTR_KEY_VALUE_LOCATION;
+    }
+    else if((n.size == 22) && (strncmp(n.value, "Original Creation Date", 22) == 0))
+    {
+        *value = KMIP_ATTR_ORIGINAL_CREATION_DATE;
+    }
+    else if((n.size == 23) && (strncmp(n.value, "Random Number Generator", 23) == 0))
+    {
+        *value = KMIP_ATTR_RANDOM_NUMBER_GENERATOR;
+    }
+    else if((n.size == 21) && (strncmp(n.value, "PKCS#12 Friendly Name", 21) == 0))
+    {
+        *value = KMIP_ATTR_PKCS_12_FRIENDLY_NAME;
+    }
+    else if((n.size == 11) && (strncmp(n.value, "Description", 11) == 0))
+    {
+        *value = KMIP_ATTR_DESCRIPTION;
+    }
+    else if((n.size == 7) && (strncmp(n.value, "Comment", 7) == 0))
+    {
+        *value = KMIP_ATTR_COMMENT;
+    }
+    else if((n.size == 9) && (strncmp(n.value, "Sensitive", 9) == 0))
+    {
+        *value = KMIP_ATTR_SENSITIVE;
+    }
+    else if((n.size == 16) && (strncmp(n.value, "Always Sensitive", 16) == 0))
+    {
+        *value = KMIP_ATTR_ALWAYS_SENSITIVE;
+    }
+    else if((n.size == 11) && (strncmp(n.value, "Extractable", 11) == 0))
+    {
+        *value = KMIP_ATTR_EXTRACTABLE;
+    }
+    else if((n.size == 17) && (strncmp(n.value, "Never Extractable", 17) == 0))
+    {
+        *value = KMIP_ATTR_NEVER_EXTRACTABLE;
     }
     /* TODO (ph) Add all remaining attributes here. */
     else

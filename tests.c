@@ -842,6 +842,54 @@ test_is_attribute_tag(TestTracker *tracker)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CRYPTOGRAPHIC_PARAMETERS))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CRYPTOGRAPHIC_DOMAIN_PARAMETERS))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CERTIFICATE_TYPE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CERTIFICATE_LENGTH))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_X509_CERTIFICATE_IDENTIFIER))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_X509_CERTIFICATE_SUBJECT))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_X509_CERTIFICATE_ISSUER))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CERTIFICATE_IDENTIFIER))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CERTIFICATE_SUBJECT))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CERTIFICATE_ISSUER))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_DIGEST))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
     if(!kmip_is_attribute_tag(KMIP_TAG_OPERATION_POLICY_NAME))
     {
         TEST_FAILED(tracker, __func__, __LINE__);
@@ -850,11 +898,127 @@ test_is_attribute_tag(TestTracker *tracker)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
+    if(!kmip_is_attribute_tag(KMIP_TAG_LEASE_TIME))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_USAGE_LIMITS))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
     if(!kmip_is_attribute_tag(KMIP_TAG_STATE))
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
     if(!kmip_is_attribute_tag(KMIP_TAG_INITIAL_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_ACTIVATION_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_PROCESS_START_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_PROTECT_STOP_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_DEACTIVATION_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_DESTROY_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_COMPROMISE_OCCURRENCE_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_COMPROMISE_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_REVOCATION_REASON))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_ARCHIVE_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_OBJECT_GROUP))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_FRESH))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_LINK))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_CONTACT_INFORMATION))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_LAST_CHANGE_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_ALTERNATIVE_NAME))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_KEY_VALUE_PRESENT))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_KEY_VALUE_LOCATION))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_ORIGINAL_CREATION_DATE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_RANDOM_NUMBER_GENERATOR))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_PKCS_12_FRIENDLY_NAME))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_DESCRIPTION))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_COMMENT))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_SENSITIVE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_ALWAYS_SENSITIVE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_EXTRACTABLE))
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+    if(!kmip_is_attribute_tag(KMIP_TAG_NEVER_EXTRACTABLE))
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
@@ -872,107 +1036,107 @@ test_get_enum_string_index(TestTracker *tracker)
 {
     TRACK_TEST(tracker);
 
-    if(kmip_get_enum_string_index(KMIP_TAG_ATTESTATION_TYPE) != 0)
+    if(kmip_get_enum_string_index(KMIP_TAG_UNIQUE_IDENTIFIER) != 0)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_BATCH_ERROR_CONTINUATION_OPTION) != 1)
+    if(kmip_get_enum_string_index(KMIP_TAG_NAME) != 1)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_BLOCK_CIPHER_MODE) != 2)
+    if(kmip_get_enum_string_index(KMIP_TAG_OBJECT_TYPE) != 2)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_CREDENTIAL_TYPE) != 3)
+    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_ALGORITHM) != 3)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_ALGORITHM) != 4)
+    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_LENGTH) != 4)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK) != 5)
+    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_PARAMETERS) != 5)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM) != 6)
+    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_DOMAIN_PARAMETERS) != 6)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_ENCODING_OPTION) != 7)
+    if(kmip_get_enum_string_index(KMIP_TAG_CERTIFICATE_TYPE) != 7)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_HASHING_ALGORITHM) != 8)
+    if(kmip_get_enum_string_index(KMIP_TAG_CERTIFICATE_LENGTH) != 8)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_KEY_COMPRESSION_TYPE) != 9)
+    if(kmip_get_enum_string_index(KMIP_TAG_X509_CERTIFICATE_IDENTIFIER) != 9)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_KEY_FORMAT_TYPE) != 10)
+    if(kmip_get_enum_string_index(KMIP_TAG_X509_CERTIFICATE_SUBJECT) != 10)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_KEY_ROLE_TYPE) != 11)
+    if(kmip_get_enum_string_index(KMIP_TAG_X509_CERTIFICATE_ISSUER) != 11)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_KEY_WRAP_TYPE) != 12)
+    if(kmip_get_enum_string_index(KMIP_TAG_CERTIFICATE_IDENTIFIER) != 12)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_MASK_GENERATOR) != 13)
+    if(kmip_get_enum_string_index(KMIP_TAG_CERTIFICATE_SUBJECT) != 13)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_NAME_TYPE) != 14)
+    if(kmip_get_enum_string_index(KMIP_TAG_CERTIFICATE_ISSUER) != 14)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_OBJECT_TYPE) != 15)
+    if(kmip_get_enum_string_index(KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM) != 15)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_OPERATION) != 16)
+    if(kmip_get_enum_string_index(KMIP_TAG_DIGEST) != 16)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_PADDING_METHOD) != 17)
+    if(kmip_get_enum_string_index(KMIP_TAG_OPERATION_POLICY_NAME) != 17)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_PROTECTION_STORAGE_MASK) != 18)
+    if(kmip_get_enum_string_index(KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK) != 18)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_RESULT_REASON) != 19)
+    if(kmip_get_enum_string_index(KMIP_TAG_LEASE_TIME) != 19)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_RESULT_STATUS) != 20)
+    if(kmip_get_enum_string_index(KMIP_TAG_USAGE_LIMITS) != 20)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
@@ -982,52 +1146,147 @@ test_get_enum_string_index(TestTracker *tracker)
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_TAG) != 22)
+    if(kmip_get_enum_string_index(KMIP_TAG_INITIAL_DATE) != 22)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_TYPE) != 23)
+    if(kmip_get_enum_string_index(KMIP_TAG_ACTIVATION_DATE) != 23)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_WRAPPING_METHOD) != 24)
+    if(kmip_get_enum_string_index(KMIP_TAG_PROCESS_START_DATE) != 24)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_MAXIMUM_ITEMS) != 25)
+    if(kmip_get_enum_string_index(KMIP_TAG_PROTECT_STOP_DATE) != 25)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_STORAGE_STATUS_MASK) != 26)
+    if(kmip_get_enum_string_index(KMIP_TAG_DEACTIVATION_DATE) != 26)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_OBJECT_GROUP_MEMBER) != 27)
+    if(kmip_get_enum_string_index(KMIP_TAG_DESTROY_DATE) != 27)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_OFFSET_ITEMS) != 28)
+    if(kmip_get_enum_string_index(KMIP_TAG_COMPROMISE_OCCURRENCE_DATE) != 28)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_LOCATED_ITEMS) != 29)
+    if(kmip_get_enum_string_index(KMIP_TAG_COMPROMISE_DATE) != 29)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(KMIP_TAG_INITIAL_DATE) != 30)
+    if(kmip_get_enum_string_index(KMIP_TAG_REVOCATION_REASON) != 30)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
 
-    if(kmip_get_enum_string_index(-1) != 31)
+    if(kmip_get_enum_string_index(KMIP_TAG_ARCHIVE_DATE) != 31)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_OBJECT_GROUP) != 32)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_FRESH) != 33)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_LINK) != 34)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION) != 35)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_CONTACT_INFORMATION) != 36)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_LAST_CHANGE_DATE) != 37)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_ALTERNATIVE_NAME) != 38)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_KEY_VALUE_PRESENT) != 39)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_KEY_VALUE_LOCATION) != 40)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_ORIGINAL_CREATION_DATE) != 41)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_RANDOM_NUMBER_GENERATOR) != 42)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_PKCS_12_FRIENDLY_NAME) != 43)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_DESCRIPTION) != 44)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_COMMENT) != 45)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_SENSITIVE) != 46)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_ALWAYS_SENSITIVE) != 47)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_EXTRACTABLE) != 48)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(KMIP_TAG_NEVER_EXTRACTABLE) != 49)
+    {
+        TEST_FAILED(tracker, __func__, __LINE__);
+    }
+
+    if(kmip_get_enum_string_index(-1) != 50)
     {
         TEST_FAILED(tracker, __func__, __LINE__);
     }
