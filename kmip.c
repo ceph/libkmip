@@ -4532,7 +4532,10 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
         kmip_print_text_string(indent + 2, "Object Group", value);
         break;
 
-        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        case KMIP_ATTR_FRESH:
+        printf("%d\n", *(bool32 *)value);
+        break;
+
         // case KMIP_ATTR_LINK:	XXX how to hack struct?
         // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
         // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
@@ -4543,7 +4546,11 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
 
         // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
         // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
-        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        printf("%d\n", *(bool32 *)value);
+        break;
+
         // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
 
         case KMIP_ATTR_ORIGINAL_CREATION_DATE:
@@ -4570,10 +4577,22 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
         kmip_print_text_string(indent + 2, "Comment", value);
         break;
 
-        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
-        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+
+        case KMIP_ATTR_SENSITIVE:
+        printf("%d\n", *(bool32 *)value);
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        printf("%d\n", *(bool32 *)value);
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        printf("%d\n", *(bool32 *)value);
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        printf("%d\n", *(bool32 *)value);
+        break;
 
         case KMIP_ATTR_KEY_FORMAT_TYPE:
         kmip_print_key_format_type_enum(*(enum key_format_type *)value);
@@ -5598,7 +5617,10 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 kmip_free_text_string(ctx, value->value);
                 break;
 
-                // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+                case KMIP_ATTR_FRESH:
+                *(bool32 *)value->value = 0;
+                break;
+
                 // case KMIP_ATTR_LINK:	XXX how to hack struct?
                 // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
                 // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
@@ -5609,7 +5631,11 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
 
                 // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
                 // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
-                // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+
+                case KMIP_ATTR_KEY_VALUE_PRESENT:
+                *(bool32 *)value->value = 0;
+                break;
+
                 // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
 
                 case KMIP_ATTR_ORIGINAL_CREATION_DATE:
@@ -5632,10 +5658,21 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 kmip_free_text_string(ctx, value->value);
                 break;
 
-                // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
-                // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
-                // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
-                // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+                case KMIP_ATTR_SENSITIVE:
+                *(bool32 *)value->value = 0;
+                break;
+
+                case KMIP_ATTR_ALWAYS_SENSITIVE:
+                *(bool32 *)value->value = 0;
+                break;
+
+                case KMIP_ATTR_EXTRACTABLE:
+                *(bool32 *)value->value = 0;
+                break;
+
+                case KMIP_ATTR_NEVER_EXTRACTABLE:
+                *(bool32 *)value->value = 0;
+                break;
 
                 case KMIP_ATTR_KEY_FORMAT_TYPE:
                 *(int32*)value->value = 0;
@@ -6985,6 +7022,12 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         case KMIP_ATTR_LEASE_TIME:
         case KMIP_ATTR_STATE:
+        case KMIP_ATTR_FRESH:
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        case KMIP_ATTR_SENSITIVE:
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        case KMIP_ATTR_EXTRACTABLE:
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
         case KMIP_ATTR_KEY_FORMAT_TYPE:
         {
             copy->value = kmip_deep_copy_int32(ctx, (int32 *)value->value);
@@ -7026,18 +7069,12 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         // case KMIP_ATTR_DIGEST:
         // case KMIP_ATTR_USAGE_LIMITS:
         // case KMIP_ATTR_REVOCATION_REASON:
-        // case KMIP_ATTR_FRESH:
         // case KMIP_ATTR_LINK:
         // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
         // case KMIP_ATTR_CONTACT_INFORMATION:
         // case KMIP_ATTR_CUSTOM_ATTRIBUTE:
         // case KMIP_ATTR_ALTERNATIVE_NAME:
-        // case KMIP_ATTR_KEY_VALUE_PRESENT:
         // case KMIP_ATTR_KEY_VALUE_LOCATION:
-        // case KMIP_ATTR_SENSITIVE:
-        // case KMIP_ATTR_ALWAYS_SENSITIVE:
-        // case KMIP_ATTR_EXTRACTABLE:
-        // case KMIP_ATTR_NEVER_EXTRACTABLE:
 
         default:
         {
@@ -7257,6 +7294,12 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
                 case KMIP_ATTR_LEASE_TIME:
                 case KMIP_ATTR_STATE:
+                case KMIP_ATTR_FRESH:
+                case KMIP_ATTR_KEY_VALUE_PRESENT:
+                case KMIP_ATTR_SENSITIVE:
+                case KMIP_ATTR_ALWAYS_SENSITIVE:
+                case KMIP_ATTR_EXTRACTABLE:
+                case KMIP_ATTR_NEVER_EXTRACTABLE:
                 case KMIP_ATTR_KEY_FORMAT_TYPE:
                 if(*(int32*)a->value != *(int32*)b->value)
                 {
@@ -7292,18 +7335,12 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 // case KMIP_ATTR_DIGEST:
                 // case KMIP_ATTR_USAGE_LIMITS:
                 // case KMIP_ATTR_REVOCATION_REASON:
-                // case KMIP_ATTR_FRESH:
                 // case KMIP_ATTR_LINK:
                 // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:
                 // case KMIP_ATTR_CONTACT_INFORMATION:
                 // case KMIP_ATTR_CUSTOM_ATTRIBUTE:
                 // case KMIP_ATTR_ALTERNATIVE_NAME:
-                // case KMIP_ATTR_KEY_VALUE_PRESENT:
                 // case KMIP_ATTR_KEY_VALUE_LOCATION:
-                // case KMIP_ATTR_SENSITIVE:
-                // case KMIP_ATTR_ALWAYS_SENSITIVE:
-                // case KMIP_ATTR_EXTRACTABLE:
-                // case KMIP_ATTR_NEVER_EXTRACTABLE:
 
                 default:
                 /* NOTE (ph) Unsupported types can't be compared. */
@@ -10167,7 +10204,10 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
         break;
 
-        // case KMIP_ATTR_FRESH:        XXX how to hack bool?
+        case KMIP_ATTR_FRESH:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
+
         // case KMIP_ATTR_LINK: XXX how to hack struct?
         // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:     XXX how to hack struct?
         // case KMIP_ATTR_CONTACT_INFORMATION:  XXX how to hack struct?
@@ -10178,7 +10218,11 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
 
         // case KMIP_ATTR_CUSTOM_ATTRIBUTE:     XXX how to hack custom?
         // case KMIP_ATTR_ALTERNATIVE_NAME:     XXX how to hack struct?
-        // case KMIP_ATTR_KEY_VALUE_PRESENT:    XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
+
         // case KMIP_ATTR_KEY_VALUE_LOCATION:   XXX how to hack struct?
 
         case KMIP_ATTR_ORIGINAL_CREATION_DATE:
@@ -10201,10 +10245,21 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         result = kmip_encode_text_string(ctx, t, (TextString*)value->value);
         break;
 
-        // case KMIP_ATTR_SENSITIVE:    XXX how to hack bool?
-        // case KMIP_ATTR_ALWAYS_SENSITIVE:     XXX how to hack bool?
-        // case KMIP_ATTR_EXTRACTABLE:  XXX how to hack bool?
-        // case KMIP_ATTR_NEVER_EXTRACTABLE:    XXX how to hack bool?
+        case KMIP_ATTR_SENSITIVE:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        result = kmip_encode_bool(ctx, t, *(bool32 *)value->value);
+        break;
 
         case KMIP_ATTR_KEY_FORMAT_TYPE:
         result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
@@ -10474,7 +10529,16 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
-        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        case KMIP_ATTR_FRESH:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_FRESH,
+                *(bool32 *)value->value
+            );
+        }
+        break;
+
         // case KMIP_ATTR_LINK:	XXX how to hack struct?
         // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
         // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
@@ -10491,7 +10555,17 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
 
         // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
         // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
-        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_KEY_VALUE_PRESENT,
+                *(bool32 *)value->value
+            );
+        }
+        break;
+
         // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
 
         case KMIP_ATTR_ORIGINAL_CREATION_DATE:
@@ -10544,10 +10618,45 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
-        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
-        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+        case KMIP_ATTR_SENSITIVE:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_SENSITIVE,
+                *(bool32 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_ALWAYS_SENSITIVE,
+                *(bool32 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_EXTRACTABLE,
+                *(bool32 *)value->value
+            );
+        }
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        {
+            result = kmip_encode_bool(
+                ctx,
+                KMIP_TAG_NEVER_EXTRACTABLE,
+                *(bool32 *)value->value
+            );
+        }
+        break;
 
         case KMIP_ATTR_KEY_FORMAT_TYPE:
         {
@@ -13209,7 +13318,13 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         CHECK_RESULT(ctx, result);
         break;
 
-        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        case KMIP_ATTR_FRESH:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Fresh boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
         // case KMIP_ATTR_LINK:	XXX how to hack struct?
         // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
         // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
@@ -13223,7 +13338,14 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
 
         // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
         // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
-        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_VALUE_PRESENT:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "KeyValuePresent boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
         // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
 
         case KMIP_ATTR_ORIGINAL_CREATION_DATE:
@@ -13261,10 +13383,33 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         CHECK_RESULT(ctx, result);
         break;
 
-        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
-        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+        case KMIP_ATTR_SENSITIVE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Sensitive boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_ALWAYS_SENSITIVE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "AlwaysSensitive boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_EXTRACTABLE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Extractable boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_NEVER_EXTRACTABLE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "NeverExtractable boolean");
+        result = kmip_decode_bool(ctx, t, (bool32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
 
         case KMIP_ATTR_KEY_FORMAT_TYPE:
         value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
@@ -13580,7 +13725,17 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
         }
         break;
 
-        // case KMIP_TAG_FRESH:	XXX how to hack bool?
+        case KMIP_TAG_FRESH:
+        {
+            value->type = KMIP_ATTR_FRESH;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Fresh boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_FRESH, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
         // case KMIP_TAG_LINK:	XXX how to hack struct?
         // case KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
         // case KMIP_TAG_CONTACT_INFORMATION:	XXX how to hack struct?
@@ -13598,7 +13753,18 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
 
         // case KMIP_TAG_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
         // case KMIP_TAG_ALTERNATIVE_NAME:	XXX how to hack struct?
-        // case KMIP_TAG_KEY_VALUE_PRESENT:	XXX how to hack bool?
+
+        case KMIP_TAG_KEY_VALUE_PRESENT:
+        {
+            value->type = KMIP_ATTR_KEY_VALUE_PRESENT;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "KeyValuePresent boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_KEY_VALUE_PRESENT, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
         // case KMIP_TAG_KEY_VALUE_LOCATION:	XXX how to hack struct?
 
         case KMIP_TAG_ORIGINAL_CREATION_DATE:
@@ -13656,10 +13822,49 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
         }
         break;
 
-        // case KMIP_TAG_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_TAG_ALWAYS_SENSITIVE:	XXX how to hack bool?
-        // case KMIP_TAG_EXTRACTABLE:	XXX how to hack bool?
-        // case KMIP_TAG_NEVER_EXTRACTABLE:	XXX how to hack bool?
+        case KMIP_TAG_SENSITIVE:
+        {
+            value->type = KMIP_ATTR_SENSITIVE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Sensitive boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_SENSITIVE, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_ALWAYS_SENSITIVE:
+        {
+            value->type = KMIP_ATTR_ALWAYS_SENSITIVE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "AlwaysSensitive boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_ALWAYS_SENSITIVE, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_EXTRACTABLE:
+        {
+            value->type = KMIP_ATTR_EXTRACTABLE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "Extractable boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_EXTRACTABLE, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_NEVER_EXTRACTABLE:
+        {
+            value->type = KMIP_ATTR_NEVER_EXTRACTABLE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(bool32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(bool32), "NeverExtractable boolean");
+
+            result = kmip_decode_bool(ctx, KMIP_TAG_NEVER_EXTRACTABLE, (bool32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
 
         case KMIP_TAG_KEY_FORMAT_TYPE:
         {
