@@ -122,7 +122,8 @@ enum attribute_type
     KMIP_ATTR_SENSITIVE                       = 47,
     KMIP_ATTR_ALWAYS_SENSITIVE                = 48,
     KMIP_ATTR_EXTRACTABLE                     = 49,
-    KMIP_ATTR_NEVER_EXTRACTABLE               = 50
+    KMIP_ATTR_NEVER_EXTRACTABLE               = 50,
+    KMIP_ATTR_KEY_FORMAT_TYPE                 = 51
 };
 
 enum batch_error_continuation_option

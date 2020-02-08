@@ -215,6 +215,7 @@ static const char *kmip_attribute_names[] = {
     "Always Sensitive",
     "Extractable",
     "Never Extractable",
+    "Key Format Type",
     "Unknown" /* Catch all for unsupported enumerations */
 };
 
@@ -423,8 +424,12 @@ kmip_get_enum_string_index(enum tag t)
         return(49);
         break;
 
-        default:
+        case KMIP_TAG_KEY_FORMAT_TYPE:
         return(50);
+        break;
+
+        default:
+        return(51);
         break;
     };
 }
@@ -1758,7 +1763,8 @@ kmip_is_attribute_tag(uint32 value)
         KMIP_TAG_SENSITIVE,
         KMIP_TAG_ALWAYS_SENSITIVE,
         KMIP_TAG_EXTRACTABLE,
-        KMIP_TAG_NEVER_EXTRACTABLE
+        KMIP_TAG_NEVER_EXTRACTABLE,
+        KMIP_TAG_KEY_FORMAT_TYPE
     };
 
     for(size_t i = 0; i < ARRAY_LENGTH(attribute_tags); i++)
@@ -3233,6 +3239,10 @@ kmip_print_attribute_type_enum(enum attribute_type value)
         printf("Never Extractable");
         break;
 
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        printf("Key Format Type");
+        break;
+
         default:
         printf("Unknown");
         break;
@@ -4564,6 +4574,11 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
         // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
         // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
         // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        kmip_print_key_format_type_enum(*(enum key_format_type *)value);
+        printf("\n");
+        break;
         
         default:
         printf("Unknown\n");
@@ -5621,7 +5636,11 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
                 // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
                 // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
-                
+
+                case KMIP_ATTR_KEY_FORMAT_TYPE:
+                *(int32*)value->value = 0;
+                break;
+
                 default:
                 /* NOTE (ph) Hitting this case means that we don't know what the */
                 /*      actual type, size, or value of value->value is. We can   */
@@ -6966,6 +6985,7 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
         case KMIP_ATTR_LEASE_TIME:
         case KMIP_ATTR_STATE:
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
         {
             copy->value = kmip_deep_copy_int32(ctx, (int32 *)value->value);
             if(copy->value == NULL)
@@ -7237,6 +7257,7 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
                 case KMIP_ATTR_LEASE_TIME:
                 case KMIP_ATTR_STATE:
+                case KMIP_ATTR_KEY_FORMAT_TYPE:
                 if(*(int32*)a->value != *(int32*)b->value)
                 {
                     return(KMIP_FALSE);
@@ -9977,6 +9998,11 @@ kmip_encode_attribute_name(KMIP *ctx, enum attribute_type value)
         attribute_name.size = 17;
         break;
 
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        attribute_name.value = "Key Format Type";
+        attribute_name.size = 15;
+        break;
+
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
         return(KMIP_ERROR_ATTR_UNSUPPORTED);
@@ -10179,6 +10205,10 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         // case KMIP_ATTR_ALWAYS_SENSITIVE:     XXX how to hack bool?
         // case KMIP_ATTR_EXTRACTABLE:  XXX how to hack bool?
         // case KMIP_ATTR_NEVER_EXTRACTABLE:    XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        result = kmip_encode_enum(ctx, t, *(int32 *)value->value);
+        break;
 
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
@@ -10510,6 +10540,21 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
                 ctx,
                 KMIP_TAG_COMMENT,
                 (TextString*)value->value
+            );
+        }
+        break;
+
+        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
+        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        {
+            result = kmip_encode_enum(
+                ctx,
+                KMIP_TAG_KEY_FORMAT_TYPE,
+                *(int32 *)value->value
             );
         }
         break;
@@ -12855,6 +12900,11 @@ kmip_decode_attribute_name(KMIP *ctx, enum attribute_type *value)
     {
         *value = KMIP_ATTR_NEVER_EXTRACTABLE;
     }
+    else if((n.size == 15) && (strncmp(n.value, "Key Format Type", 15) == 0))
+    {
+        *value = KMIP_ATTR_KEY_FORMAT_TYPE;
+    }
+
     /* TODO (ph) Add all remaining attributes here. */
     else
     {
@@ -13215,6 +13265,14 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
         // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
         // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
+
+        case KMIP_ATTR_KEY_FORMAT_TYPE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "KeyFormatType enumeration");
+        result = kmip_decode_enum(ctx, t, (int32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        CHECK_ENUM(ctx, KMIP_TAG_KEY_FORMAT_TYPE, *(int32 *)value->value);
+        break;
         
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
@@ -13602,6 +13660,19 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
         // case KMIP_TAG_ALWAYS_SENSITIVE:	XXX how to hack bool?
         // case KMIP_TAG_EXTRACTABLE:	XXX how to hack bool?
         // case KMIP_TAG_NEVER_EXTRACTABLE:	XXX how to hack bool?
+
+        case KMIP_TAG_KEY_FORMAT_TYPE:
+        {
+            value->type = KMIP_ATTR_KEY_FORMAT_TYPE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "KeyFormatType enumeration");
+
+            result = kmip_decode_enum(ctx, KMIP_TAG_KEY_FORMAT_TYPE, (int32 *)value->value);
+            CHECK_RESULT(ctx, result);
+
+            CHECK_ENUM(ctx, KMIP_TAG_KEY_FORMAT_TYPE, *(int32 *)value->value);
+        }
+        break;
 
         default:
         {
