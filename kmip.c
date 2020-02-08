@@ -4468,7 +4468,10 @@ kmip_print_attribute_value(int indent, enum attribute_type type, void *value)
         kmip_print_cryptographic_usage_mask_enums(indent + 2, *(int32 *)value);
         break;
 
-        // case KMIP_ATTR_LEASE_TIME:	XXX how to hack interval?
+        case KMIP_ATTR_LEASE_TIME:
+        printf("%u\n", *(uint32 *)value);
+        break;
+
         // case KMIP_ATTR_USAGE_LIMITS:	XXX how to hack struct?
 
         case KMIP_ATTR_STATE:
@@ -5528,11 +5531,14 @@ kmip_free_attribute(KMIP *ctx, Attribute *value)
                 *(int32 *)value->value = KMIP_UNSET;
                 break;
 
-                // case KMIP_ATTR_LEASE_TIME:	XXX how to hack interval?
+                case KMIP_ATTR_LEASE_TIME:
+                *(uint32 *)value->value = 0;
+                break;
+
                 // case KMIP_ATTR_USAGE_LIMITS:	XXX how to hack struct?
 
                 case KMIP_ATTR_STATE:
-                *(int32*)value->value = 0;
+                *(uint32*)value->value = 0;
                 break;
 
                 case KMIP_ATTR_INITIAL_DATE:
@@ -6958,6 +6964,7 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         case KMIP_ATTR_CERTIFICATE_LENGTH:
         case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
         case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
+        case KMIP_ATTR_LEASE_TIME:
         case KMIP_ATTR_STATE:
         {
             copy->value = kmip_deep_copy_int32(ctx, (int32 *)value->value);
@@ -6997,7 +7004,6 @@ kmip_deep_copy_attribute(KMIP *ctx, const Attribute *value)
         // case KMIP_ATTR_CERTIFICATE_SUBJECT:
         // case KMIP_ATTR_CERTIFICATE_ISSUER:
         // case KMIP_ATTR_DIGEST:
-        // case KMIP_ATTR_LEASE_TIME:
         // case KMIP_ATTR_USAGE_LIMITS:
         // case KMIP_ATTR_REVOCATION_REASON:
         // case KMIP_ATTR_FRESH:
@@ -7229,6 +7235,7 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 case KMIP_ATTR_CERTIFICATE_LENGTH:
                 case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
                 case KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK:
+                case KMIP_ATTR_LEASE_TIME:
                 case KMIP_ATTR_STATE:
                 if(*(int32*)a->value != *(int32*)b->value)
                 {
@@ -7262,7 +7269,6 @@ kmip_compare_attribute(const Attribute *a, const Attribute *b)
                 // case KMIP_ATTR_CERTIFICATE_SUBJECT:
                 // case KMIP_ATTR_CERTIFICATE_ISSUER:
                 // case KMIP_ATTR_DIGEST:
-                // case KMIP_ATTR_LEASE_TIME:
                 // case KMIP_ATTR_USAGE_LIMITS:
                 // case KMIP_ATTR_REVOCATION_REASON:
                 // case KMIP_ATTR_FRESH:
@@ -10084,7 +10090,10 @@ kmip_encode_attribute_v1(KMIP *ctx, const Attribute *value)
         result = kmip_encode_integer(ctx, t, *(int32 *)value->value);
         break;
 
-        // case KMIP_ATTR_LEASE_TIME:   XXX how to hack interval?
+        case KMIP_ATTR_LEASE_TIME:
+        result = kmip_encode_interval(ctx, t, *(uint32 *)value->value);
+        break;
+
         // case KMIP_ATTR_USAGE_LIMITS: XXX how to hack struct?
         
         case KMIP_ATTR_STATE:
@@ -10311,7 +10320,16 @@ kmip_encode_attribute_v2(KMIP *ctx, const Attribute *value)
         }
         break;
 
-        // case KMIP_ATTR_LEASE_TIME:   XXX how to hack interval?
+        case KMIP_ATTR_LEASE_TIME:
+        {
+            result = kmip_encode_interval(
+                ctx,
+                KMIP_TAG_LEASE_TIME,
+                *(uint32 *)value->value
+            );
+        }
+        break;
+
         // case KMIP_ATTR_USAGE_LIMITS: XXX how to hack struct?
 
         case KMIP_ATTR_STATE:
@@ -12982,6 +13000,39 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         result = kmip_decode_integer(ctx, t, (int32 *)value->value);
         CHECK_RESULT(ctx, result);
         break;
+
+        // case KMIP_ATTR_CRYPTOGRAPHIC_PARAMETERS:	XXX how to hack struct?
+        // case KMIP_ATTR_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:	XXX how to hack struct?
+
+        case KMIP_ATTR_CERTIFICATE_TYPE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "CertificateType enumeration");
+        result = kmip_decode_enum(ctx, t, (int32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        CHECK_ENUM(ctx, KMIP_TAG_CERTIFICATE_TYPE, *(int32 *)value->value);
+        break;
+
+        case KMIP_ATTR_CERTIFICATE_LENGTH:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "CertificateLength integer");
+        result = kmip_decode_integer(ctx, t, (int32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_X509_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_X509_CERTIFICATE_ISSUER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_ATTR_CERTIFICATE_ISSUER:	XXX how to hack struct?
+
+        case KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "DigitalSignatureAlgorithm enumeration");
+        result = kmip_decode_enum(ctx, t, (int32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        CHECK_ENUM(ctx, KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM, *(int32 *)value->value);
+        break;
         
         case KMIP_ATTR_DIGEST:
 	// same issues as Name above, all the same uglies.
@@ -13018,6 +13069,15 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         result = kmip_decode_integer(ctx, t, (int32 *)value->value);
         CHECK_RESULT(ctx, result);
         break;
+
+        case KMIP_ATTR_LEASE_TIME:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(uint32));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(uint32), "LeaseTime interval");
+        result = kmip_decode_interval(ctx, t, (uint32 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_USAGE_LIMITS: XXX how to hack struct?
         
         case KMIP_ATTR_STATE:
         value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
@@ -13029,10 +13089,132 @@ kmip_decode_attribute_v1(KMIP *ctx, Attribute *value)
         
         case KMIP_ATTR_INITIAL_DATE:
         value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
-        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CryptographicUsageMask integer");
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "InitialDate datetime");
         result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
         CHECK_RESULT(ctx, result);
         break;
+
+        case KMIP_ATTR_ACTIVATION_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ActivationDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_PROCESS_START_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ProcessStartDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_PROTECT_STOP_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ProtectStopDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_DEACTIVATION_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "DeactivationDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_DESTROY_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "DestroyDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CompromiseOccurrenceDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_COMPROMISE_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CompromiseDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_REVOCATION_REASON:	XXX how to hack struct?
+
+        case KMIP_ATTR_ARCHIVE_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ArchiveDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_OBJECT_GROUP:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "ObjectGroup text string");
+        result = kmip_decode_text_string(ctx, t, (TextString*)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_FRESH:	XXX how to hack bool?
+        // case KMIP_ATTR_LINK:	XXX how to hack struct?
+        // case KMIP_ATTR_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
+        // case KMIP_ATTR_CONTACT_INFORMATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_LAST_CHANGE_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "LastChangeDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
+        // case KMIP_ATTR_ALTERNATIVE_NAME:	XXX how to hack struct?
+        // case KMIP_ATTR_KEY_VALUE_PRESENT:	XXX how to hack bool?
+        // case KMIP_ATTR_KEY_VALUE_LOCATION:	XXX how to hack struct?
+
+        case KMIP_ATTR_ORIGINAL_CREATION_DATE:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "OriginalCreationDate datetime");
+        result = kmip_decode_date_time(ctx, t, (uint64 *)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_RANDOM_NUMBER_GENERATOR:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "RandomNumberGenerator text string");
+        result = kmip_decode_text_string(ctx, t, (TextString*)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_PKCS_12_FRIENDLY_NAME:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Pkcs12FriendlyName text string");
+        result = kmip_decode_text_string(ctx, t, (TextString*)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_DESCRIPTION:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Description text string");
+        result = kmip_decode_text_string(ctx, t, (TextString*)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        case KMIP_ATTR_COMMENT:
+        value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+        CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Comment text string");
+        result = kmip_decode_text_string(ctx, t, (TextString*)value->value);
+        CHECK_RESULT(ctx, result);
+        break;
+
+        // case KMIP_ATTR_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_ALWAYS_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_ATTR_EXTRACTABLE:	XXX how to hack bool?
+        // case KMIP_ATTR_NEVER_EXTRACTABLE:	XXX how to hack bool?
         
         default:
         kmip_push_error_frame(ctx, __func__, __LINE__);
@@ -13122,6 +13304,75 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
         }
         break;
 
+        // case KMIP_TAG_CRYPTOGRAPHIC_PARAMETERS:	XXX how to hack struct?
+        // case KMIP_TAG_CRYPTOGRAPHIC_DOMAIN_PARAMETERS:	XXX how to hack struct?
+
+        case KMIP_TAG_CERTIFICATE_TYPE:
+        {
+            value->type = KMIP_ATTR_CERTIFICATE_TYPE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "CertificateType enumeration");
+
+            result = kmip_decode_enum(ctx, KMIP_TAG_CERTIFICATE_TYPE, (int32 *)value->value);
+            CHECK_RESULT(ctx, result);
+
+            CHECK_ENUM(ctx, KMIP_TAG_CERTIFICATE_TYPE, *(int32 *)value->value);
+        }
+        break;
+
+        case KMIP_TAG_CERTIFICATE_LENGTH:
+        {
+            value->type = KMIP_ATTR_CERTIFICATE_LENGTH;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "CertificateLength integer");
+
+            result = kmip_decode_integer(ctx, KMIP_TAG_CERTIFICATE_LENGTH, (int32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_X509_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_TAG_X509_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_TAG_X509_CERTIFICATE_ISSUER:	XXX how to hack struct?
+        // case KMIP_TAG_CERTIFICATE_IDENTIFIER:	XXX how to hack struct?
+        // case KMIP_TAG_CERTIFICATE_SUBJECT:	XXX how to hack struct?
+        // case KMIP_TAG_CERTIFICATE_ISSUER:	XXX how to hack struct?
+
+        case KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM:
+        {
+            value->type = KMIP_ATTR_DIGITAL_SIGNATURE_ALGORITHM;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int32), "DigitalSignatureAlgorithm enumeration");
+
+            result = kmip_decode_enum(ctx, KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM, (int32 *)value->value);
+            CHECK_RESULT(ctx, result);
+
+            CHECK_ENUM(ctx, KMIP_TAG_DIGITAL_SIGNATURE_ALGORITHM, *(int32 *)value->value);
+        }
+        break;
+
+        case KMIP_TAG_DIGEST:
+        {
+            value->type = KMIP_ATTR_DIGEST;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(Digest));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(Digest), "Digest structure");
+
+            result = kmip_decode_digest(ctx, (Digest *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_OPERATION_POLICY_NAME:
+        {
+            value->type = KMIP_ATTR_OPERATION_POLICY_NAME;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "OperationPolicyName text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_OPERATION_POLICY_NAME, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
         case KMIP_TAG_CRYPTOGRAPHIC_USAGE_MASK:
         {
             value->type = KMIP_ATTR_CRYPTOGRAPHIC_USAGE_MASK;
@@ -13132,6 +13383,19 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
             CHECK_RESULT(ctx, result);
         }
         break;
+
+        case KMIP_TAG_LEASE_TIME:
+        {
+            value->type = KMIP_ATTR_LEASE_TIME;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(uint32));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(uint32), "LeaseTime interval");
+
+            result = kmip_decode_interval(ctx, KMIP_TAG_LEASE_TIME, (uint32 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_USAGE_LIMITS:  XXX how to hack struct?
 
         case KMIP_TAG_STATE:
         {
@@ -13150,12 +13414,194 @@ kmip_decode_attribute_v2(KMIP *ctx, Attribute *value)
         {
             value->type = KMIP_ATTR_INITIAL_DATE;
             value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
-            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CryptographicUsageMask integer");
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "InitialDate integer");
 
             result = kmip_decode_date_time(ctx, KMIP_TAG_INITIAL_DATE, (uint64 *)value->value);
             CHECK_RESULT(ctx, result);
         }
         break;
+
+        case KMIP_TAG_ACTIVATION_DATE:
+        {
+            value->type = KMIP_ATTR_ACTIVATION_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ActivationDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_ACTIVATION_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_PROCESS_START_DATE:
+        {
+            value->type = KMIP_ATTR_PROCESS_START_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ProcessStartDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_PROCESS_START_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_PROTECT_STOP_DATE:
+        {
+            value->type = KMIP_ATTR_PROTECT_STOP_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ProtectStopDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_PROTECT_STOP_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_DEACTIVATION_DATE:
+        {
+            value->type = KMIP_ATTR_DEACTIVATION_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "DeactivationDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_DEACTIVATION_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_DESTROY_DATE:
+        {
+            value->type = KMIP_ATTR_DESTROY_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "DestroyDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_DESTROY_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_COMPROMISE_OCCURRENCE_DATE:
+        {
+            value->type = KMIP_ATTR_COMPROMISE_OCCURRENCE_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CompromiseOccurrenceDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_COMPROMISE_OCCURRENCE_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_COMPROMISE_DATE:
+        {
+            value->type = KMIP_ATTR_COMPROMISE_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "CompromiseDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_COMPROMISE_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_REVOCATION_REASON:	XXX how to hack struct?
+
+        case KMIP_TAG_ARCHIVE_DATE:
+        {
+            value->type = KMIP_ATTR_ARCHIVE_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "ArchiveDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_ARCHIVE_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_OBJECT_GROUP:
+        {
+            value->type = KMIP_ATTR_OBJECT_GROUP;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "ObjectGroup text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_OBJECT_GROUP, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_FRESH:	XXX how to hack bool?
+        // case KMIP_TAG_LINK:	XXX how to hack struct?
+        // case KMIP_TAG_APPLICATION_SPECIFIC_INFORMATION:	XXX how to hack struct?
+        // case KMIP_TAG_CONTACT_INFORMATION:	XXX how to hack struct?
+
+        case KMIP_TAG_LAST_CHANGE_DATE:
+        {
+            value->type = KMIP_ATTR_LAST_CHANGE_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "LastChangeDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_LAST_CHANGE_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_CUSTOM_ATTRIBUTE:	XXX how to hack custom?
+        // case KMIP_TAG_ALTERNATIVE_NAME:	XXX how to hack struct?
+        // case KMIP_TAG_KEY_VALUE_PRESENT:	XXX how to hack bool?
+        // case KMIP_TAG_KEY_VALUE_LOCATION:	XXX how to hack struct?
+
+        case KMIP_TAG_ORIGINAL_CREATION_DATE:
+        {
+            value->type = KMIP_ATTR_ORIGINAL_CREATION_DATE;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(int64));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(int64), "OriginalCreationDate integer");
+
+            result = kmip_decode_date_time(ctx, KMIP_TAG_ORIGINAL_CREATION_DATE, (uint64 *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_RANDOM_NUMBER_GENERATOR:
+        {
+            value->type = KMIP_ATTR_RANDOM_NUMBER_GENERATOR;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "RandomNumberGenerator text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_RANDOM_NUMBER_GENERATOR, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_PKCS_12_FRIENDLY_NAME:
+        {
+            value->type = KMIP_ATTR_PKCS_12_FRIENDLY_NAME;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Pkcs12FriendlyName text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_PKCS_12_FRIENDLY_NAME, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_DESCRIPTION:
+        {
+            value->type = KMIP_ATTR_DESCRIPTION;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Description text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_DESCRIPTION, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        case KMIP_TAG_COMMENT:
+        {
+            value->type = KMIP_ATTR_COMMENT;
+            value->value = ctx->calloc_func(ctx->state, 1, sizeof(TextString));
+            CHECK_NEW_MEMORY(ctx, value->value, sizeof(TextString), "Comment text string");
+
+            result = kmip_decode_text_string(ctx, KMIP_TAG_COMMENT, (TextString *)value->value);
+            CHECK_RESULT(ctx, result);
+        }
+        break;
+
+        // case KMIP_TAG_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_TAG_ALWAYS_SENSITIVE:	XXX how to hack bool?
+        // case KMIP_TAG_EXTRACTABLE:	XXX how to hack bool?
+        // case KMIP_TAG_NEVER_EXTRACTABLE:	XXX how to hack bool?
 
         default:
         {
